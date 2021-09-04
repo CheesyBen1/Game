@@ -12,6 +12,8 @@
 #include "FrameTimer.h"
 #include "player.h"
 #include "ball.h"
+#include "gameState.h"
+#include "menu.h"
 
 
 #define WINDOW_CLASS_NAME "Ping Pang"
@@ -32,7 +34,9 @@ IDirect3DDevice9* d3dDevice;
 
 LPD3DXSPRITE sprite = NULL;
 
-boolean gameStart = false;
+menu start;
+
+bool gameStart = false;
 
 player player1;
 player player2;
@@ -224,8 +228,6 @@ bool createDirectX() {
 	return true;
 }
 
-
-
 void cleanupDirectX() {
 
 
@@ -291,6 +293,8 @@ void createInput() {
 	dInputKeyboardDevice->SetCooperativeLevel(g_hWnd, DISCL_BACKGROUND | DISCL_NONEXCLUSIVE);
 	dInputMouseDevice->SetCooperativeLevel(g_hWnd, DISCL_BACKGROUND | DISCL_NONEXCLUSIVE);
 }
+
+bool *menuInputs[] = { &enterKey };
 
 void getInput() {
 	//	Get immediate Keyboard Data.
@@ -375,13 +379,13 @@ void initialize() {
 	hr = D3DXCreateSprite(d3dDevice, &sprite);
 	testFail(hr);
 
-	ball1.mass = 10;
+	ball1.mass = 5;
 	ball1.forceMagnitude = 100;
 
 	ball1.rotation = random(6);
 
-	player1.speed = 10;
-	player2.speed = 10;
+	player1.speed = 20;
+	player2.speed = 20;
 
 
 	player1.height = 256;
@@ -645,6 +649,7 @@ void update(int framesToUpdate) {
 	if (wKey) {
 
 		if (player1.position.y >= 0) {
+
 			player1.moveY -= player1.speed;
 		}
 		else {
@@ -690,30 +695,54 @@ void update(int framesToUpdate) {
 
 		if (ball1.position.y < 0) {
 			ball1.position.y = 0;
+			ball1.velocity.y *= 1.05;
 		}
 		if (ball1.position.y > WINDOWHEIGHT - ball1.height * ball1.scaling.y) {
 			ball1.position.y = WINDOWHEIGHT - ball1.height * ball1.scaling.y;
+			ball1.velocity.y *= 1.05;
 		}
 
 	}
 
 
 	if (checkCol(player1.position, 128, 32, ball1.position, 32, 32)) {
+		ball1.position.x = player1.position.x + 33;
 		ball1.velocity.x *= -1;
-		
-		
-		
+		if (pow(ball1.velocity.x,2) > 1) {
+			ball1.velocity.x *= 1.05;
+			
+		}
+		else {
+			ball1.velocity.x += 1;
+		}
+
 		
 	}
 
 	if (checkCol(player2.position, 128, 32, ball1.position, 32, 32)) {
+		ball1.position.x = player2.position.x - 33;
 		ball1.velocity.x *= -1 ;
+		if (pow(ball1.velocity.x, 2) > 1) {
+			ball1.velocity.x *= 1.05;
+			
+		}
+		else {
+			ball1.velocity.x += 1;
+		}
 		
-		
-		
-
 	}
 
+	if (pow(ball1.velocity.x * 10, 2) <100) {
+		if(ball1.velocity >= 0){
+			ball1.velocity.x += 10;
+
+		}
+		else {
+			ball1.velocity.x -= 10;
+		}	
+	}
+
+	
 
 }
 
@@ -734,7 +763,7 @@ void update(int framesToUpdate) {
 
 
 
-	cout << "player1x: " << player1.position.x << " player2: " << player1.position.y << endl;
+	cout << "ball1x: " << ball1.velocity.x << " ball1y: " << ball1.velocity.y << endl;
 
 	counter++;
 }
@@ -775,7 +804,7 @@ int main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nSho
 	dInputMouseDevice->Acquire();
 
 	while (windowsRunning()) {
-
+		
 
 		/*
 		Game ->
@@ -784,9 +813,13 @@ int main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nSho
 		Redner()
 		PlaySound()
 		*/
+		if (gameStart == false) {
+			start.getInput(dInputKeyboardDevice, diKeys);
+			gameStart = start.update();
+		}
+
 
 		getInput();
-
 		
 		update(myTimer.framesToUpdate());
 		
