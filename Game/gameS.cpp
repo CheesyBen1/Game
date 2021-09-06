@@ -10,6 +10,12 @@ bool sStartKey = false;
 
 bool enterStartKey = false;
 
+int red  = 255; 
+int green = 255;
+int blue = 255;
+
+
+
 D3DXVECTOR2 lineVertices[] = { D3DXVECTOR2((WINDOWWIDTH / 2) - 1,0), D3DXVECTOR2(WINDOWWIDTH / 2 - 1, WINDOWHEIGHT) };
 D3DXVECTOR2 lineVertices2[] = { D3DXVECTOR2((WINDOWWIDTH / 2) + 1,0), D3DXVECTOR2(WINDOWWIDTH / 2 + 1, WINDOWHEIGHT) };
 
@@ -83,6 +89,9 @@ bool checkCol(D3DXVECTOR2 aPos, int aHeight, int aWidth, D3DXVECTOR2 bPos, int b
 
 bool gameS::update(int framesToUpdate, int* counterP , player* playerP1, player* playerP2, ball* ballP)
 {
+	
+
+
 	player &player1 = *playerP1;
 	player &player2 = *playerP2;
 	ball &ball1 = *ballP;
@@ -184,15 +193,15 @@ bool gameS::update(int framesToUpdate, int* counterP , player* playerP1, player*
 		if (ball1.position.y < 0 || ball1.position.y > WINDOWHEIGHT - ball1.height * ball1.scaling.y) {
 
 			ball1.velocity.y *= -1;
-
+			ball1.velocity.x *= 1.05;
 
 			if (ball1.position.y < 0) {
 				ball1.position.y = 0;
-				ball1.velocity.y *= 1.05;
+				
 			}
 			if (ball1.position.y > WINDOWHEIGHT - ball1.height * ball1.scaling.y) {
 				ball1.position.y = WINDOWHEIGHT - ball1.height * ball1.scaling.y;
-				ball1.velocity.y *= 1.05;
+				
 			}
 
 		}
@@ -201,6 +210,11 @@ bool gameS::update(int framesToUpdate, int* counterP , player* playerP1, player*
 		if (checkCol(player1.position, 128, 32, ball1.position, 32, 32)) {
 			ball1.position.x = player1.position.x + 33;
 			ball1.velocity.x *= -1;
+
+			red = 255;
+			green = 0;
+			blue = 0;
+
 			if (pow(ball1.velocity.x, 2) > 1) {
 				ball1.velocity.x *= 1.05;
 
@@ -215,6 +229,11 @@ bool gameS::update(int framesToUpdate, int* counterP , player* playerP1, player*
 		if (checkCol(player2.position, 128, 32, ball1.position, 32, 32)) {
 			ball1.position.x = player2.position.x - 33;
 			ball1.velocity.x *= -1;
+
+			red = 0;
+			green = 0;
+			blue = 255;
+
 			if (pow(ball1.velocity.x, 2) > 1) {
 				ball1.velocity.x *= 1.05;
 
@@ -297,7 +316,7 @@ void gameS::render(IDirect3DDevice9* d3dDevice, LPD3DXSPRITE* spriteP, LPD3DXLIN
 	D3DXMatrixTransformation2D(&mat, NULL, 0.0, &ball1.scaling, &ball1.spriteCenter, ball1.rotation, &ball1.position);
 	sprite->SetTransform(&mat);
 
-	sprite->Draw(ball1.texture, &ball1.rect, NULL, NULL, D3DCOLOR_XRGB(255, 255, 255));
+	sprite->Draw(ball1.texture, &ball1.rect, NULL, NULL, D3DCOLOR_XRGB(red, green, blue));
 
 	sprite->End();
 

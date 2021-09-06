@@ -25,8 +25,6 @@ using namespace std;
 HWND g_hWnd = NULL;
 WNDCLASS wndClass;
 
-int red, green, blue;
-
 
 HRESULT hr = NULL;
 IDirect3DDevice9* d3dDevice;
