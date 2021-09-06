@@ -306,54 +306,54 @@ void createInput() {
 	dInputMouseDevice->SetCooperativeLevel(g_hWnd, DISCL_BACKGROUND | DISCL_NONEXCLUSIVE);
 }
 
-bool *menuInputs[] = { &enterKey };
+//old getInput
 
-void getInput() {
-	//	Get immediate Keyboard Data.
-	dInputKeyboardDevice->GetDeviceState(256, diKeys);
-	/*
-	if (diKeys[DIK_UP] & 0x80)
-	{
-		upKey = true;
-	}
-	if (diKeys[DIK_DOWN] & 0x80)
-	{
-		downKey = true;
-	}
-	if (diKeys[DIK_LEFT] & 0x80)
-	{
-		leftKey = true;
-
-	}
-	if (diKeys[DIK_RIGHT] & 0x80)
-	{
-		rightKey = true;
-	}
-	if (diKeys[DIK_W] & 0x80)
-	{
-		wKey = true;
-	}
-	if (diKeys[DIK_A] & 0x80)
-	{
-		aKey = true;
-	}
-	if (diKeys[DIK_S] & 0x80)
-	{
-		sKey = true;
-	}
-	if (diKeys[DIK_D] & 0x80)
-	{
-		dKey = true;
-	}
-	if (diKeys[DIK_RETURN] & 0x80) {
-		enterKey = true;
-	}*/
-
-	dInputMouseDevice->GetDeviceState(sizeof(mouseState), &mouseState);
-
-	xMouse = mouseState.lX;
-	yMouse = mouseState.lY;
-}
+//void getInput() {
+//	//	Get immediate Keyboard Data.
+//	dInputKeyboardDevice->GetDeviceState(256, diKeys);
+//	/*
+//	if (diKeys[DIK_UP] & 0x80)
+//	{
+//		upKey = true;
+//	}
+//	if (diKeys[DIK_DOWN] & 0x80)
+//	{
+//		downKey = true;
+//	}
+//	if (diKeys[DIK_LEFT] & 0x80)
+//	{
+//		leftKey = true;
+//
+//	}
+//	if (diKeys[DIK_RIGHT] & 0x80)
+//	{
+//		rightKey = true;
+//	}
+//	if (diKeys[DIK_W] & 0x80)
+//	{
+//		wKey = true;
+//	}
+//	if (diKeys[DIK_A] & 0x80)
+//	{
+//		aKey = true;
+//	}
+//	if (diKeys[DIK_S] & 0x80)
+//	{
+//		sKey = true;
+//	}
+//	if (diKeys[DIK_D] & 0x80)
+//	{
+//		dKey = true;
+//	}
+//	if (diKeys[DIK_RETURN] & 0x80) {
+//		enterKey = true;
+//	}*/
+//
+//	dInputMouseDevice->GetDeviceState(sizeof(mouseState), &mouseState);
+//
+//	xMouse = mouseState.lX;
+//	yMouse = mouseState.lY;
+//}
 
 void testFail(HRESULT hr) {
 
@@ -391,7 +391,7 @@ void initialize() {
 	hr = D3DXCreateSprite(d3dDevice, &sprite);
 	testFail(hr);
 
-	ball1.mass = 5;
+	ball1.mass = 10;
 	ball1.forceMagnitude = 100;
 
 	ball1.rotation = random(6);
@@ -463,57 +463,57 @@ void initialize() {
 	//	Create texture. Study the documentation.
 }
 
+//render old
 
-
-void render() {
-	//	Clear the back buffer.
-	//d3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(red, green, blue), 1.0f, 0);
-
-	//d3dDevice->BeginScene();
-
-
-
-	//line->Begin();
-	//line->Draw(lineVertices, 2, D3DCOLOR_XRGB(255, 255, 255));
-	//line->Draw(lineVertices2, 2, D3DCOLOR_XRGB(255, 255, 255));
-	//line->End();
-
-
-	//sprite->Begin(D3DXSPRITE_ALPHABLEND);
-
-	//D3DXMATRIX mat;
-	//
-	//D3DXMatrixTransformation2D(&mat, NULL, 0.0, &player1.scaling, &player1.spriteCenter, player1.rotation, &player1.position);
-	//sprite->SetTransform(&mat);
-
-	//sprite->Draw(player1.texture, &player1.rect, NULL, NULL, D3DCOLOR_XRGB(255, 0, 0));
-
-	//D3DXMatrixTransformation2D(&mat, NULL, 0.0, &player2.scaling, &player2.spriteCenter, player2.rotation, &player2.position);
-	//sprite->SetTransform(&mat);
-	//
-	//sprite->Draw(player2.texture, &player2.rect, NULL, NULL, D3DCOLOR_XRGB(0, 0, 255));
-
-	//ball1.spriteCenter = D3DXVECTOR2 (8, 8);
-
-	//D3DXMatrixTransformation2D(&mat, NULL, 0.0, &ball1.scaling, &ball1.spriteCenter, ball1.rotation, &ball1.position);
-	//sprite->SetTransform(&mat);
-
-	//sprite->Draw(ball1.texture, &ball1.rect, NULL, NULL, D3DCOLOR_XRGB(255, 255, 255));
-
-	//sprite->End();
-
-
-	////	End the scene
-	//d3dDevice->EndScene();
-
-	////	Present the back buffer to screen
-	//d3dDevice->Present(NULL, NULL, NULL, NULL);
-
-
-}
-
-//e
+//void render() {
+//		Clear the back buffer.
+//	d3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(red, green, blue), 1.0f, 0);
 //
+//	d3dDevice->BeginScene();
+//
+//
+//
+//	line->Begin();
+//	line->Draw(lineVertices, 2, D3DCOLOR_XRGB(255, 255, 255));
+//	line->Draw(lineVertices2, 2, D3DCOLOR_XRGB(255, 255, 255));
+//	line->End();
+//
+//
+//	sprite->Begin(D3DXSPRITE_ALPHABLEND);
+//
+//	D3DXMATRIX mat;
+//	
+//	D3DXMatrixTransformation2D(&mat, NULL, 0.0, &player1.scaling, &player1.spriteCenter, player1.rotation, &player1.position);
+//	sprite->SetTransform(&mat);
+//
+//	sprite->Draw(player1.texture, &player1.rect, NULL, NULL, D3DCOLOR_XRGB(255, 0, 0));
+//
+//	D3DXMatrixTransformation2D(&mat, NULL, 0.0, &player2.scaling, &player2.spriteCenter, player2.rotation, &player2.position);
+//	sprite->SetTransform(&mat);
+//	
+//	sprite->Draw(player2.texture, &player2.rect, NULL, NULL, D3DCOLOR_XRGB(0, 0, 255));
+//
+//	ball1.spriteCenter = D3DXVECTOR2 (8, 8);
+//
+//	D3DXMatrixTransformation2D(&mat, NULL, 0.0, &ball1.scaling, &ball1.spriteCenter, ball1.rotation, &ball1.position);
+//	sprite->SetTransform(&mat);
+//
+//	sprite->Draw(ball1.texture, &ball1.rect, NULL, NULL, D3DCOLOR_XRGB(255, 255, 255));
+//
+//	sprite->End();
+//
+//
+//	//	End the scene
+//	d3dDevice->EndScene();
+//
+//	//	Present the back buffer to screen
+//	d3dDevice->Present(NULL, NULL, NULL, NULL);
+//
+//
+//}
+
+//old check bool
+
 //bool checkCol(D3DXVECTOR2 aPos, int aHeight, int aWidth, D3DXVECTOR2 bPos, int bHeight, int bWidth) {
 //
 //	aPosXL = aPos.x ;
@@ -603,182 +603,183 @@ RECT charSpriteOutputCycle(RECT& spriteRect, int textureWidth, int textureHeight
 	return spriteRect;
 }
 
+//old update
 
-void update(int framesToUpdate) {
-
-//	if (enterKey) {
-//		if (gameStart == false) {
-//		
+//void update(int framesToUpdate) {
 //
-//			ball1.rotation = random(6);
-//			ball1.position = D3DXVECTOR2((WINDOWWIDTH / 2) - ball1.width / 2 * ball1.scaling.x, (WINDOWHEIGHT / 2) - ball1.height / 2 * ball1.scaling.y);
-//			player1.position = D3DXVECTOR2(50 - player1.width * player1.scaling.x, WINDOWHEIGHT / 2 - (player1.height / 2) * player1.scaling.x);
-//			player2.position = D3DXVECTOR2(WINDOWWIDTH - 50, WINDOWHEIGHT / 2 - (player2.height / 2) * player2.scaling.x);
+////	if (enterKey) {
+////		if (gameStart == false) {
+////		
+////
+////			ball1.rotation = random(6);
+////			ball1.position = D3DXVECTOR2((WINDOWWIDTH / 2) - ball1.width / 2 * ball1.scaling.x, (WINDOWHEIGHT / 2) - ball1.height / 2 * ball1.scaling.y);
+////			player1.position = D3DXVECTOR2(50 - player1.width * player1.scaling.x, WINDOWHEIGHT / 2 - (player1.height / 2) * player1.scaling.x);
+////			player2.position = D3DXVECTOR2(WINDOWWIDTH - 50, WINDOWHEIGHT / 2 - (player2.height / 2) * player2.scaling.x);
+////
+////			ball1.force.x = ball1.forceMagnitude * sin(ball1.rotation);
+////			ball1.force.y = ball1.forceMagnitude * -cos(ball1.rotation);
+////
+////			ball1.velocity = ball1.force / ball1.mass;
+////
+////			gameStart = true;			
+////
+////
+////		}
+////		enterKey = false;
+////	}
+////
+////	if(gameStart==true){
+////
+////	if (upKey) {
+////
+////		if (player2.position.y >= 0) {
+////			player2.moveY -= player2.speed;
+////		}
+////		else {
+////			if (player2.position.y <= 0) {
+////				player2.position.y = 0;
+////			}
+////		}
+////
+////
+////
+////		upKey = false;
+////
+////	}
+////
+////	if (downKey) {
+////		if (player2.position.y <= (WINDOWHEIGHT - player2.height * player2.scaling.x)) {
+////			player2.moveY += player2.speed;
+////		}
+////		else {
+////			if (player2.position.y <= (WINDOWHEIGHT - player2.height * player2.scaling.x)) {
+////				player2.position.y = (WINDOWHEIGHT - player2.height * player2.scaling.x);
+////			}
+////		}
+////
+////		downKey = false;
+////	}
+////	if (wKey) {
+////
+////		if (player1.position.y >= 0) {
+////
+////			player1.moveY -= player1.speed;
+////		}
+////		else {
+////			if (player1.position.y <= 0) {
+////				player1.position.y = 0;
+////			}
+////		}
+////
+////
+////		wKey = false;
+////	}
+////	if (sKey) {
+////
+////		if (player1.position.y <= (WINDOWHEIGHT - player1.height * player1.scaling.x)) {
+////			player1.moveY += player1.speed;
+////		}
+////		else {
+////			if (player1.position.y <= (WINDOWHEIGHT - player1.height * player1.scaling.x)) {
+////				player1.position.y = (WINDOWHEIGHT - player1.height * player1.scaling.x);
+////			}
+////		}
+////
+////
+////		sKey = false;
+////	}
+////
+////	if (ball1.position.x < 0 || ball1.position.x > WINDOWWIDTH - ball1.width * ball1.scaling.x) {
+////
+////		if (ball1.position.x < 0) {
+////			ball1.velocity = D3DXVECTOR2(0, 0);
+////			gameStart = false;
+////		}
+////		if (ball1.position.x > WINDOWWIDTH - ball1.width * ball1.scaling.x) {
+////			ball1.velocity = D3DXVECTOR2(0, 0);
+////			gameStart = false;
+////		}
+////	}
+////
+////	if (ball1.position.y < 0 || ball1.position.y > WINDOWHEIGHT - ball1.height * ball1.scaling.y) {
+////
+////		ball1.velocity.y *= -0.95;
+////		
+////
+////		if (ball1.position.y < 0) {
+////			ball1.position.y = 0;
+////			ball1.velocity.y *= 1.05;
+////		}
+////		if (ball1.position.y > WINDOWHEIGHT - ball1.height * ball1.scaling.y) {
+////			ball1.position.y = WINDOWHEIGHT - ball1.height * ball1.scaling.y;
+////			ball1.velocity.y *= 1.05;
+////		}
+////
+////	}
+////
+////
+////	if (checkCol(player1.position, 128, 32, ball1.position, 32, 32)) {
+////		ball1.position.x = player1.position.x + 33;
+////		ball1.velocity.x *= -1;
+////		if (pow(ball1.velocity.x,2) > 1) {
+////			ball1.velocity.x *= 1.05;
+////			
+////		}
+////		else {
+////			ball1.velocity.x += 1;
+////		}
+////
+////		
+////	}
+////
+////	if (checkCol(player2.position, 128, 32, ball1.position, 32, 32)) {
+////		ball1.position.x = player2.position.x - 33;
+////		ball1.velocity.x *= -1 ;
+////		if (pow(ball1.velocity.x, 2) > 1) {
+////			ball1.velocity.x *= 1.05;
+////			
+////		}
+////		else {
+////			ball1.velocity.x += 1;
+////		}
+////		
+////	}
+////
+////	if (pow(ball1.velocity.x * 10, 2) <100) {
+////		if(ball1.velocity >= 0){
+////			ball1.velocity.x += 10;
+////
+////		}
+////		else {
+////			ball1.velocity.x -= 10;
+////		}	
+////	}
+////
+////	
+////
+////}
+////
+////
+////	for (int frame = 0; frame < framesToUpdate; frame++) {
+////
+////		if (gameStart == true) {
+////			player1.position.y += player1.moveY;
+////			player1.moveY = 0;
+////			player2.position.y += player2.moveY;
+////			player2.moveY = 0;
+////
+////			//ball1.velocity += ball1.acceleration;		
+////			ball1.position += ball1.velocity;
+////		}
+////		
+////	}
 //
-//			ball1.force.x = ball1.forceMagnitude * sin(ball1.rotation);
-//			ball1.force.y = ball1.forceMagnitude * -cos(ball1.rotation);
-//
-//			ball1.velocity = ball1.force / ball1.mass;
-//
-//			gameStart = true;			
 //
 //
-//		}
-//		enterKey = false;
-//	}
+//	cout << "ball1x: " << ball1.velocity.x << " ball1y: " << ball1.velocity.y << endl;
 //
-//	if(gameStart==true){
-//
-//	if (upKey) {
-//
-//		if (player2.position.y >= 0) {
-//			player2.moveY -= player2.speed;
-//		}
-//		else {
-//			if (player2.position.y <= 0) {
-//				player2.position.y = 0;
-//			}
-//		}
-//
-//
-//
-//		upKey = false;
-//
-//	}
-//
-//	if (downKey) {
-//		if (player2.position.y <= (WINDOWHEIGHT - player2.height * player2.scaling.x)) {
-//			player2.moveY += player2.speed;
-//		}
-//		else {
-//			if (player2.position.y <= (WINDOWHEIGHT - player2.height * player2.scaling.x)) {
-//				player2.position.y = (WINDOWHEIGHT - player2.height * player2.scaling.x);
-//			}
-//		}
-//
-//		downKey = false;
-//	}
-//	if (wKey) {
-//
-//		if (player1.position.y >= 0) {
-//
-//			player1.moveY -= player1.speed;
-//		}
-//		else {
-//			if (player1.position.y <= 0) {
-//				player1.position.y = 0;
-//			}
-//		}
-//
-//
-//		wKey = false;
-//	}
-//	if (sKey) {
-//
-//		if (player1.position.y <= (WINDOWHEIGHT - player1.height * player1.scaling.x)) {
-//			player1.moveY += player1.speed;
-//		}
-//		else {
-//			if (player1.position.y <= (WINDOWHEIGHT - player1.height * player1.scaling.x)) {
-//				player1.position.y = (WINDOWHEIGHT - player1.height * player1.scaling.x);
-//			}
-//		}
-//
-//
-//		sKey = false;
-//	}
-//
-//	if (ball1.position.x < 0 || ball1.position.x > WINDOWWIDTH - ball1.width * ball1.scaling.x) {
-//
-//		if (ball1.position.x < 0) {
-//			ball1.velocity = D3DXVECTOR2(0, 0);
-//			gameStart = false;
-//		}
-//		if (ball1.position.x > WINDOWWIDTH - ball1.width * ball1.scaling.x) {
-//			ball1.velocity = D3DXVECTOR2(0, 0);
-//			gameStart = false;
-//		}
-//	}
-//
-//	if (ball1.position.y < 0 || ball1.position.y > WINDOWHEIGHT - ball1.height * ball1.scaling.y) {
-//
-//		ball1.velocity.y *= -0.95;
-//		
-//
-//		if (ball1.position.y < 0) {
-//			ball1.position.y = 0;
-//			ball1.velocity.y *= 1.05;
-//		}
-//		if (ball1.position.y > WINDOWHEIGHT - ball1.height * ball1.scaling.y) {
-//			ball1.position.y = WINDOWHEIGHT - ball1.height * ball1.scaling.y;
-//			ball1.velocity.y *= 1.05;
-//		}
-//
-//	}
-//
-//
-//	if (checkCol(player1.position, 128, 32, ball1.position, 32, 32)) {
-//		ball1.position.x = player1.position.x + 33;
-//		ball1.velocity.x *= -1;
-//		if (pow(ball1.velocity.x,2) > 1) {
-//			ball1.velocity.x *= 1.05;
-//			
-//		}
-//		else {
-//			ball1.velocity.x += 1;
-//		}
-//
-//		
-//	}
-//
-//	if (checkCol(player2.position, 128, 32, ball1.position, 32, 32)) {
-//		ball1.position.x = player2.position.x - 33;
-//		ball1.velocity.x *= -1 ;
-//		if (pow(ball1.velocity.x, 2) > 1) {
-//			ball1.velocity.x *= 1.05;
-//			
-//		}
-//		else {
-//			ball1.velocity.x += 1;
-//		}
-//		
-//	}
-//
-//	if (pow(ball1.velocity.x * 10, 2) <100) {
-//		if(ball1.velocity >= 0){
-//			ball1.velocity.x += 10;
-//
-//		}
-//		else {
-//			ball1.velocity.x -= 10;
-//		}	
-//	}
-//
-//	
-//
+//	counter++;
 //}
-//
-//
-//	for (int frame = 0; frame < framesToUpdate; frame++) {
-//
-//		if (gameStart == true) {
-//			player1.position.y += player1.moveY;
-//			player1.moveY = 0;
-//			player2.position.y += player2.moveY;
-//			player2.moveY = 0;
-//
-//			//ball1.velocity += ball1.acceleration;		
-//			ball1.position += ball1.velocity;
-//		}
-//		
-//	}
-
-
-
-	cout << "ball1x: " << ball1.velocity.x << " ball1y: " << ball1.velocity.y << endl;
-
-	counter++;
-}
 
 //	use int main if you want to have a console to print out message
 //int main()
@@ -827,7 +828,7 @@ int main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nSho
 		*/
 		if (gameStart == false) {
 			start.getInput(dInputKeyboardDevice, diKeys);
-			gameStart = start.update();
+			gameStart = start.update(myTimer.framesToUpdate());
 			start.render();
 			start.playSound();
 		}
@@ -837,7 +838,7 @@ int main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nSho
 			startGame.render(d3dDevice, &sprite, &line, &player1, &player2, &ball1);
 			
 		}
-
+		cout << "ball1x: " << ball1.velocity.x << " ball1y: " << ball1.velocity.y << endl;
 	}
 
 	

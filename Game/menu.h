@@ -7,7 +7,7 @@ class menu :
 public:
     menu();
     void getInput(LPDIRECTINPUTDEVICE8 dInputKeyboardDevice1, BYTE diKeys[256]);
-    bool update();
+    bool update(int framesToUpdate);
     void render();
     void playSound();
 };
