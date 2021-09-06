@@ -1,30 +1,23 @@
 #include "gameS.h"
 
+bool upKey = false;
+bool downKey = false;
 
-
-bool upStartKey = false;
-bool downStartKey = false;
-
-bool wStartKey = false;
-bool sStartKey = false;
+bool wKey = false;
+bool sKey = false;
 
 bool enterStartKey = false;
+bool escStartKey = false;
 
-int red  = 255; 
+int red = 255;
 int green = 255;
 int blue = 255;
-
-
 
 D3DXVECTOR2 lineVertices[] = { D3DXVECTOR2((WINDOWWIDTH / 2) - 1,0), D3DXVECTOR2(WINDOWWIDTH / 2 - 1, WINDOWHEIGHT) };
 D3DXVECTOR2 lineVertices2[] = { D3DXVECTOR2((WINDOWWIDTH / 2) + 1,0), D3DXVECTOR2(WINDOWWIDTH / 2 + 1, WINDOWHEIGHT) };
 
-gameS::gameS(IDirect3DDevice9* d3dDeviceStart1, LPD3DXSPRITE* spriteStart1, LPDIRECTINPUTDEVICE8* dInputKeyboardDevice1, player* playerr1, player* playerr2, ball* balll1)
+gameS::gameS()
 {
-	
-	
-	
-
 }
 
 void gameS::getInput(LPDIRECTINPUTDEVICE8 dInputKeyboardDevice, BYTE diKeys[256])
@@ -33,29 +26,31 @@ void gameS::getInput(LPDIRECTINPUTDEVICE8 dInputKeyboardDevice, BYTE diKeys[256]
 
 	if (diKeys[DIK_UP] & 0x80)
 	{
-		upStartKey = true;
+		upKey = true;
 	}
 	if (diKeys[DIK_DOWN] & 0x80)
 	{
-		downStartKey = true;
+		downKey = true;
 	}
 	if (diKeys[DIK_W] & 0x80)
 	{
-		wStartKey = true;
+		wKey = true;
 	}
 	if (diKeys[DIK_S] & 0x80)
 	{
-		sStartKey = true;
+		sKey = true;
 	}
 	if (diKeys[DIK_RETURN] & 0x80) {
 		enterStartKey = true;
+	}
+	if (diKeys[DIK_ESCAPE] & 0x80) {
+		escStartKey = true;
 	}
 }
 
 int aPosXL, aPosXR, aPosYU, aPosYD, bPosXL, bPosXR, bPosYU, bPosYD;
 
 bool checkCol(D3DXVECTOR2 aPos, int aHeight, int aWidth, D3DXVECTOR2 bPos, int bHeight, int bWidth) {
-
 	aPosXL = aPos.x;
 	aPosXR = aPos.x + aWidth;
 	aPosYU = aPos.y;
@@ -65,7 +60,6 @@ bool checkCol(D3DXVECTOR2 aPos, int aHeight, int aWidth, D3DXVECTOR2 bPos, int b
 	bPosXR = bPos.x + bWidth;
 	bPosYU = bPos.y;
 	bPosYD = bPos.y + bHeight;
-
 
 	if (aPosXR < bPosXL) {
 		return false;
@@ -82,24 +76,16 @@ bool checkCol(D3DXVECTOR2 aPos, int aHeight, int aWidth, D3DXVECTOR2 bPos, int b
 	else {
 		return true;
 	}
-
 }
 
-
-
-bool gameS::update(int framesToUpdate, int* counterP , player* playerP1, player* playerP2, ball* ballP)
+bool gameS::update(int framesToUpdate, int* counterP, player* playerP1, player* playerP2, ball* ballP)
 {
-	
-
-
-	player &player1 = *playerP1;
-	player &player2 = *playerP2;
-	ball &ball1 = *ballP;
+	player& player1 = *playerP1;
+	player& player2 = *playerP2;
+	ball& ball1 = *ballP;
 	int counter = *counterP;
 	/*if (enterStartKey) {
 		if (gameStart == false) {
-
-
 			ball1.rotation = random(6);
 			ball1.position = D3DXVECTOR2((WINDOWWIDTH / 2) - ball1.width / 2 * ball1.scaling.x, (WINDOWHEIGHT / 2) - ball1.height / 2 * ball1.scaling.y);
 			player1.position = D3DXVECTOR2(50 - player1.width * player1.scaling.x, WINDOWHEIGHT / 2 - (player1.height / 2) * player1.scaling.x);
@@ -111,191 +97,164 @@ bool gameS::update(int framesToUpdate, int* counterP , player* playerP1, player*
 			ball1.velocity = ball1.force / ball1.mass;
 
 			gameStart = true;
-
-
 		}
 		enterStartKey = false;
 	}*/
 
 	//if (gameStart == true) {
+	if (escStartKey) {
+		PostQuitMessage(0);
 
-		if (upStartKey) {
+		escStartKey = false;
+	}
 
-			if (player2.position.y >= 0) {
-				player2.moveY -= player2.speed;
+	if (upKey) {
+		if (player2.position.y >= 0) {
+			player2.moveY -= player2.speed;
+		}
+		else {
+			if (player2.position.y <= 0) {
+				player2.position.y = 0;
 			}
-			else {
-				if (player2.position.y <= 0) {
-					player2.position.y = 0;
-				}
-			}
-
-
-
-			upStartKey = false;
-
 		}
 
-		if (downStartKey) {
+		upKey = false;
+	}
+
+	if (downKey) {
+		if (player2.position.y <= (WINDOWHEIGHT - player2.height * player2.scaling.x)) {
+			player2.moveY += player2.speed;
+		}
+		else {
 			if (player2.position.y <= (WINDOWHEIGHT - player2.height * player2.scaling.x)) {
-				player2.moveY += player2.speed;
+				player2.position.y = (WINDOWHEIGHT - player2.height * player2.scaling.x);
 			}
-			else {
-				if (player2.position.y <= (WINDOWHEIGHT - player2.height * player2.scaling.x)) {
-					player2.position.y = (WINDOWHEIGHT - player2.height * player2.scaling.x);
-				}
-			}
-
-			downStartKey = false;
 		}
-		if (wStartKey) {
 
-			if (player1.position.y >= 0) {
-
-				player1.moveY -= player1.speed;
-			}
-			else {
-				if (player1.position.y <= 0) {
-					player1.position.y = 0;
-				}
-			}
-
-
-			wStartKey = false;
+		downKey = false;
+	}
+	if (wKey) {
+		if (player1.position.y >= 0) {
+			player1.moveY -= player1.speed;
 		}
-		if (sStartKey) {
+		else {
+			if (player1.position.y <= 0) {
+				player1.position.y = 0;
+			}
+		}
 
+		wKey = false;
+	}
+	if (sKey) {
+		if (player1.position.y <= (WINDOWHEIGHT - player1.height * player1.scaling.x)) {
+			player1.moveY += player1.speed;
+		}
+		else {
 			if (player1.position.y <= (WINDOWHEIGHT - player1.height * player1.scaling.x)) {
-				player1.moveY += player1.speed;
-			}
-			else {
-				if (player1.position.y <= (WINDOWHEIGHT - player1.height * player1.scaling.x)) {
-					player1.position.y = (WINDOWHEIGHT - player1.height * player1.scaling.x);
-				}
-			}
-
-
-			sStartKey = false;
-		}
-
-		if (ball1.position.x < 0 || ball1.position.x > WINDOWWIDTH - ball1.width * ball1.scaling.x) {
-
-			if (ball1.position.x < 0) {
-				ball1.velocity = D3DXVECTOR2(0, 0);
-				return false;
-			}
-			if (ball1.position.x > WINDOWWIDTH - ball1.width * ball1.scaling.x) {
-				ball1.velocity = D3DXVECTOR2(0, 0);
-				return false;
+				player1.position.y = (WINDOWHEIGHT - player1.height * player1.scaling.x);
 			}
 		}
 
-		if (ball1.position.y < 0 || ball1.position.y > WINDOWHEIGHT - ball1.height * ball1.scaling.y) {
+		sKey = false;
+	}
 
-			ball1.velocity.y *= -1;
-			ball1.velocity.x *= 1.05;
-
-			if (ball1.position.y < 0) {
-				ball1.position.y = 0;
-				
-			}
-			if (ball1.position.y > WINDOWHEIGHT - ball1.height * ball1.scaling.y) {
-				ball1.position.y = WINDOWHEIGHT - ball1.height * ball1.scaling.y;
-				
-			}
-
+	if (ball1.position.x < 0 || ball1.position.x > WINDOWWIDTH - ball1.width * ball1.scaling.x) {
+		if (ball1.position.x < 0) {
+			ball1.velocity = D3DXVECTOR2(0, 0);
+			return false;
 		}
-
-
-		if (checkCol(player1.position, 128, 32, ball1.position, 32, 32)) {
-			ball1.position.x = player1.position.x + 33;
-			ball1.velocity.x *= -1;
-
-			red = 255;
-			green = 0;
-			blue = 0;
-
-			if (pow(ball1.velocity.x, 2) > 1) {
-				ball1.velocity.x *= 1.05;
-
-			}
-			else {
-				ball1.velocity.x += 1;
-			}
-
-
+		if (ball1.position.x > WINDOWWIDTH - ball1.width * ball1.scaling.x) {
+			ball1.velocity = D3DXVECTOR2(0, 0);
+			return false;
 		}
+	}
 
-		if (checkCol(player2.position, 128, 32, ball1.position, 32, 32)) {
-			ball1.position.x = player2.position.x - 33;
-			ball1.velocity.x *= -1;
+	if (ball1.position.y < 0 || ball1.position.y > WINDOWHEIGHT - ball1.height * ball1.scaling.y) {
+		ball1.velocity.y *= -1;
+		ball1.velocity *= 1.05;
 
-			red = 0;
-			green = 0;
-			blue = 255;
-
-			if (pow(ball1.velocity.x, 2) > 1) {
-				ball1.velocity.x *= 1.05;
-
-			}
-			else {
-				ball1.velocity.x += 1;
-			}
-
+		if (ball1.position.y < 0) {
+			ball1.position.y = 0;
 		}
-
-		if (pow(ball1.velocity.x * 10, 2) < 100) {
-			if (ball1.velocity >= 0) {
-				ball1.velocity.x += 10;
-
-			}
-			else {
-				ball1.velocity.x -= 10;
-			}
+		if (ball1.position.y > WINDOWHEIGHT - ball1.height * ball1.scaling.y) {
+			ball1.position.y = WINDOWHEIGHT - ball1.height * ball1.scaling.y;
 		}
+	}
 
+	if (checkCol(player1.position, 128, 32, ball1.position, 32, 32)) {
+		ball1.position.x = player1.position.x + 33;
+		ball1.velocity.x *= -1;
 
+		red = 255;
+		green = 0;
+		blue = 0;
+
+		if (pow(ball1.velocity.x, 2) > 1) {
+			ball1.velocity *= 1.05;
+		}
+		else {
+			ball1.velocity.x += 1;
+		}
+	}
+
+	if (checkCol(player2.position, 128, 32, ball1.position, 32, 32)) {
+		ball1.position.x = player2.position.x - 33;
+		ball1.velocity.x *= -1;
+
+		red = 0;
+		green = 0;
+		blue = 255;
+
+		if (pow(ball1.velocity.x, 2) > 1) {
+			ball1.velocity *= 1.05;
+		}
+		else {
+			ball1.velocity.x += 1;
+		}
+	}
+
+	if (pow(ball1.velocity.x * 10, 2) < 100) {
+		if (ball1.velocity >= 0) {
+			ball1.velocity.x += 10;
+		}
+		else {
+			ball1.velocity.x -= 10;
+		}
+	}
 
 	//}
 
-
 	for (int frame = 0; frame < framesToUpdate; frame++) {
-
 		//if (gameStart == true) {
-			player1.position.y += player1.moveY;
-			player1.moveY = 0;
-			player2.position.y += player2.moveY;
-			player2.moveY = 0;
+		player1.position.y += player1.moveY;
+		player1.moveY = 0;
+		player2.position.y += player2.moveY;
+		player2.moveY = 0;
 
-			//ball1.velocity += ball1.acceleration;		
-			ball1.position += ball1.velocity;
+		//ball1.velocity += ball1.acceleration;
+		ball1.position += ball1.velocity;
 		//}
-
 	}
-	
 
 	counter++;
 }
 
 void gameS::render(IDirect3DDevice9* d3dDevice, LPD3DXSPRITE* spriteP, LPD3DXLINE* lineP, player* playerP1, player* playerP2, ball* ballP)
 {
-	player &player1 = *playerP1;
-	player &player2 = *playerP2;
-	ball &ball1 = *ballP;
+	player& player1 = *playerP1;
+	player& player2 = *playerP2;
+	ball& ball1 = *ballP;
 	LPD3DXSPRITE& sprite = *spriteP;
 	LPD3DXLINE& line = *lineP;
 
-
-	d3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0,0,0), 1.0f, 0);
+	d3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
 
 	d3dDevice->BeginScene();
-
 
 	line->Begin();
 	line->Draw(lineVertices, 2, D3DCOLOR_XRGB(255, 255, 255));
 	line->Draw(lineVertices2, 2, D3DCOLOR_XRGB(255, 255, 255));
 	line->End();
-
 
 	sprite->Begin(D3DXSPRITE_ALPHABLEND);
 
@@ -320,14 +279,11 @@ void gameS::render(IDirect3DDevice9* d3dDevice, LPD3DXSPRITE* spriteP, LPD3DXLIN
 
 	sprite->End();
 
-
 	//	End the scene
 	d3dDevice->EndScene();
 
 	//	Present the back buffer to screen
 	d3dDevice->Present(NULL, NULL, NULL, NULL);
-
-
 }
 
 void gameS::playSound()

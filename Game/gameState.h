@@ -16,4 +16,3 @@ public:
 	void render();
 	void playSound();
 };
-
