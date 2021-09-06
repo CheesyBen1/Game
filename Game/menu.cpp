@@ -25,7 +25,7 @@ void menu::getInput(LPDIRECTINPUTDEVICE8 dInputKeyboardDevice, BYTE diKeys[256])
 	}
 }
 
-bool menu::update() {
+bool menu::update(int framesToUpdate) {
 
 	
 

@@ -183,7 +183,7 @@ bool gameS::update(int framesToUpdate, int* counterP , player* playerP1, player*
 
 		if (ball1.position.y < 0 || ball1.position.y > WINDOWHEIGHT - ball1.height * ball1.scaling.y) {
 
-		
+			ball1.velocity.y *= -0.95;
 
 
 			if (ball1.position.y < 0) {
@@ -253,7 +253,7 @@ bool gameS::update(int framesToUpdate, int* counterP , player* playerP1, player*
 		//}
 
 	}
-	cout << "ball1x: " << ball1.velocity.x << " ball1y: " << ball1.velocity.y << endl;
+	
 
 	counter++;
 }
@@ -266,15 +266,17 @@ void gameS::render(IDirect3DDevice9* d3dDevice, LPD3DXSPRITE* spriteP, LPD3DXLIN
 	LPD3DXSPRITE& sprite = *spriteP;
 	LPD3DXLINE& line = *lineP;
 
+
+	d3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0,0,0), 1.0f, 0);
+
+	d3dDevice->BeginScene();
+
+
 	line->Begin();
 	line->Draw(lineVertices, 2, D3DCOLOR_XRGB(255, 255, 255));
 	line->Draw(lineVertices2, 2, D3DCOLOR_XRGB(255, 255, 255));
 	line->End();
 
-
-	d3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0,0,0), 1.0f, 0);
-
-	d3dDevice->BeginScene();
 
 	sprite->Begin(D3DXSPRITE_ALPHABLEND);
 
