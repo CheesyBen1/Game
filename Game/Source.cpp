@@ -238,8 +238,6 @@ bool createDirectX() {
 	return true;
 }
 
-
-
 void cleanupDirectX() {
 
 
