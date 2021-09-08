@@ -1,7 +1,7 @@
 #include "gameO.h"
 
 bool escOverKey = false;
-bool enterOverKey = false;
+bool spaceOverKey = false;
 
 using namespace std;
 
@@ -14,8 +14,8 @@ void gameO::getInput(LPDIRECTINPUTDEVICE8 dInputKeyboardDevice, BYTE diKeys[256]
 	if (diKeys[DIK_ESCAPE] & 0x80) {
 		escOverKey = true;
 	}
-	if (diKeys[DIK_RETURN] & 0x80) {
-		enterOverKey = true;
+	if (diKeys[DIK_SPACE] & 0x80) {
+		spaceOverKey = true;
 	}
 }
 
@@ -30,9 +30,9 @@ int gameO::update(int framesToUpdate, int* scoreP1, int* scoreP2)
 	}
 
 	if (score1 < 5 && score2 < 5) {
-		cout << "Player 1 score: " << score1 << "\tPlayer 2 score: " << score2 << "\tPlay till 5" << endl;
-		if (enterOverKey) {
-			enterOverKey = false;
+		cout << "Player 1 score: " << score1 << " Player 2 score: " << score2 << "\tPlay till 5. Press SPACE to continue." << endl;
+		if (spaceOverKey) {
+			spaceOverKey = false;
 			return 2;
 		}
 	}
@@ -44,15 +44,13 @@ int gameO::update(int framesToUpdate, int* scoreP1, int* scoreP2)
 		else if (score2 == 5) {
 			cout << "Player 2 wins! ";
 		}
-		cout << "Player 1 score: " << score1 << " Player 2 score: " << score2 << " Press Enter to restart game." << endl;
-		if (enterOverKey) {
-			enterOverKey = false;
-
+		if (spaceOverKey) {
+			spaceOverKey = false;
 			score1 = 0;
 			score2 = 0;
-
 			return 1;
 		}
+		cout << "Player 1 score: " << score1 << " Player 2 score: " << score2 << " Press SPACE to restart game." << endl;
 	}
 
 	//std::cout << "Game Over. Player " << result << " wins. Press Enter to Retart" << std::endl;
