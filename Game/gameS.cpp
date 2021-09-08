@@ -1,5 +1,7 @@
 #include "gameS.h"
 
+const double pi = 3.14159265358979323846;
+
 bool upKey = false;
 bool downKey = false;
 
@@ -12,6 +14,8 @@ bool escStartKey = false;
 int red = 255;
 int green = 255;
 int blue = 255;
+
+int reset = 0;
 
 D3DXVECTOR2 lineVertices[] = { D3DXVECTOR2((WINDOWWIDTH / 2) - 1,0), D3DXVECTOR2(WINDOWWIDTH / 2 - 1, WINDOWHEIGHT) };
 D3DXVECTOR2 lineVertices2[] = { D3DXVECTOR2((WINDOWWIDTH / 2) + 1,0), D3DXVECTOR2(WINDOWWIDTH / 2 + 1, WINDOWHEIGHT) };
@@ -78,30 +82,47 @@ bool checkCol(D3DXVECTOR2 aPos, int aHeight, int aWidth, D3DXVECTOR2 bPos, int b
 	}
 }
 
-bool gameS::update(int framesToUpdate, int* counterP, player* playerP1, player* playerP2, ball* ballP)
+int gameS::update(int framesToUpdate, int* counterP, player* playerP1, player* playerP2, ball* ballP, int* scoreOne, int* scoreTwo)
 {
 	player& player1 = *playerP1;
 	player& player2 = *playerP2;
 	ball& ball1 = *ballP;
-	int counter = *counterP;
-	/*if (enterStartKey) {
-		if (gameStart == false) {
-			ball1.rotation = random(6);
-			ball1.position = D3DXVECTOR2((WINDOWWIDTH / 2) - ball1.width / 2 * ball1.scaling.x, (WINDOWHEIGHT / 2) - ball1.height / 2 * ball1.scaling.y);
-			player1.position = D3DXVECTOR2(50 - player1.width * player1.scaling.x, WINDOWHEIGHT / 2 - (player1.height / 2) * player1.scaling.x);
-			player2.position = D3DXVECTOR2(WINDOWWIDTH - 50, WINDOWHEIGHT / 2 - (player2.height / 2) * player2.scaling.x);
+	int& counter = *counterP;
 
-			ball1.force.x = ball1.forceMagnitude * sin(ball1.rotation);
-			ball1.force.y = ball1.forceMagnitude * -cos(ball1.rotation);
+	int& score1 = *scoreOne;
+	int& score2 = *scoreTwo;
 
-			ball1.velocity = ball1.force / ball1.mass;
+	if (reset == 0) {
+		srand(time(NULL));
 
-			gameStart = true;
+		ball1.rotation = ((rand() % 101) * 0.01) * (pi / 2) + pi / 4;
+		if (ball1.rotation >= (pi / 2 - pi / 16) && ball1.rotation <= (pi / 2 + pi / 16)) {
+			if (rand() % 2 == 0) {
+				ball1.rotation += pi / 16;
+			}
+			else {
+				ball1.rotation -= pi / 16;
+			}
 		}
-		enterStartKey = false;
-	}*/
+		if (rand() % 2 == 0) {
+			ball1.rotation *= -1;
+		}
+		ball1.position = D3DXVECTOR2((WINDOWWIDTH / 2) - ball1.width / 2 * ball1.scaling.x, (WINDOWHEIGHT / 2) - ball1.height / 2 * ball1.scaling.y);
+		player1.position = D3DXVECTOR2(50 - player1.width * player1.scaling.x, WINDOWHEIGHT / 2 - (player1.height / 2) * player1.scaling.x);
+		player2.position = D3DXVECTOR2(WINDOWWIDTH - 50, WINDOWHEIGHT / 2 - (player2.height / 2) * player2.scaling.x);
 
-	//if (gameStart == true) {
+		ball1.force.x = ball1.forceMagnitude * sin(ball1.rotation);
+		ball1.force.y = ball1.forceMagnitude * -cos(ball1.rotation);
+
+		ball1.velocity = ball1.force / ball1.mass;
+
+		red = 255;
+		green = 255;
+		blue = 255;
+
+		reset++;
+	}
+
 	if (escStartKey) {
 		PostQuitMessage(0);
 
@@ -161,17 +182,26 @@ bool gameS::update(int framesToUpdate, int* counterP, player* playerP1, player* 
 	if (ball1.position.x < 0 || ball1.position.x > WINDOWWIDTH - ball1.width * ball1.scaling.x) {
 		if (ball1.position.x < 0) {
 			ball1.velocity = D3DXVECTOR2(0, 0);
-			return false;
+
+			score2++;
+			reset = 0;
+
+			return 3;
 		}
 		if (ball1.position.x > WINDOWWIDTH - ball1.width * ball1.scaling.x) {
 			ball1.velocity = D3DXVECTOR2(0, 0);
-			return false;
+
+			score1++;
+			reset = 0;
+
+			return 3;
 		}
 	}
 
 	if (ball1.position.y < 0 || ball1.position.y > WINDOWHEIGHT - ball1.height * ball1.scaling.y) {
 		ball1.velocity.y *= -1;
 		ball1.velocity *= 1.05;
+		ball1.velocity.x *= 1.07;
 
 		if (ball1.position.y < 0) {
 			ball1.position.y = 0;
@@ -184,6 +214,8 @@ bool gameS::update(int framesToUpdate, int* counterP, player* playerP1, player* 
 	if (checkCol(player1.position, 128, 32, ball1.position, 32, 32)) {
 		ball1.position.x = player1.position.x + 33;
 		ball1.velocity.x *= -1;
+		ball1.velocity *= 1.05;
+		ball1.velocity.y *= 1.07;
 
 		red = 255;
 		green = 0;
@@ -200,6 +232,8 @@ bool gameS::update(int framesToUpdate, int* counterP, player* playerP1, player* 
 	if (checkCol(player2.position, 128, 32, ball1.position, 32, 32)) {
 		ball1.position.x = player2.position.x - 33;
 		ball1.velocity.x *= -1;
+		ball1.velocity *= 1.05;
+		ball1.velocity.x *= 1.02;
 
 		red = 0;
 		green = 0;
@@ -209,7 +243,7 @@ bool gameS::update(int framesToUpdate, int* counterP, player* playerP1, player* 
 			ball1.velocity *= 1.05;
 		}
 		else {
-			ball1.velocity.x += 1;
+			ball1.velocity.y += 1;
 		}
 	}
 
@@ -236,7 +270,13 @@ bool gameS::update(int framesToUpdate, int* counterP, player* playerP1, player* 
 		//}
 	}
 
+	/*cout << "ball1x: " << ball1.velocity.x << " ball1y: " << ball1.velocity.y << endl;*/
+
+	cout << "rotation: " << ball1.rotation << endl;
+
 	counter++;
+
+	return 2;
 }
 
 void gameS::render(IDirect3DDevice9* d3dDevice, LPD3DXSPRITE* spriteP, LPD3DXLINE* lineP, player* playerP1, player* playerP2, ball* ballP)

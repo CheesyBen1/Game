@@ -19,7 +19,7 @@ void menu::getInput(LPDIRECTINPUTDEVICE8 dInputKeyboardDevice, BYTE diKeys[256])
 	}
 }
 
-bool menu::update(int framesToUpdate) {
+int menu::update(int framesToUpdate) {
 	if (escMenuKey) {
 		PostQuitMessage(0);
 
@@ -29,10 +29,23 @@ bool menu::update(int framesToUpdate) {
 	if (enterMenuKey) {
 		enterMenuKey = false;
 
-		return true;
+		return 2;
 	}
+
+	std::cout << "Menu (add UI, start exit buttons), Press Enter to start" << std::endl;
+
+	return 1;
 }
-void menu::render() {
+void menu::render(IDirect3DDevice9* d3dDevice) {
+	d3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
+
+	d3dDevice->BeginScene();
+
+	//	End the scene
+	d3dDevice->EndScene();
+
+	//	Present the back buffer to screen
+	d3dDevice->Present(NULL, NULL, NULL, NULL);
 }
 
 void menu::playSound() {

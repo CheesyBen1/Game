@@ -9,12 +9,15 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 #include <dinput.h>
+
 #include "FrameTimer.h"
+
 #include "player.h"
 #include "ball.h"
-#include "gameState.h"
+
 #include "menu.h"
 #include "gameS.h"
+#include "gameO.h"
 
 #define WINDOW_CLASS_NAME "Ping Pang"
 #define WINDOWWIDTH 800
@@ -30,7 +33,7 @@ IDirect3DDevice9* d3dDevice;
 
 LPD3DXSPRITE sprite = NULL;
 
-bool gameStart = false;
+//bool gameStart = false;
 
 player player1;
 player player2;
@@ -52,8 +55,8 @@ float xMouse = 300, yMouse = 400;
 int counter = 0;
 
 menu start;
-
 gameS startGame;
+gameO gameOver;
 
 //	Window Procedure, for event handling
 //hWnd - handle the windows that sent this message
@@ -191,6 +194,9 @@ void cleanupDirectX() {
 	dInput->Release();
 	dInput = NULL;
 
+	line->Release();
+	line = NULL;
+
 	//cleanup text
 	/*font->Release();
 	font = NULL;*/
@@ -235,10 +241,10 @@ RECT setRECT(int left, int top, int right, int bottom) {
 	return setRect;
 }
 
-float random(int i) {
-	srand((unsigned)time(NULL));
-	return rand() % i + 1.28;
-}
+//float random(int i) {
+//	srand((unsigned)time(NULL));
+//	return rand() % i + 1.28;
+//}
 
 void initialize() {
 	hr = D3DXCreateSprite(d3dDevice, &sprite);
@@ -247,7 +253,7 @@ void initialize() {
 	ball1.mass = 10;
 	ball1.forceMagnitude = 100;
 
-	ball1.rotation = random(6);
+	//ball1.rotation = random(6);
 
 	player1.speed = 20;
 	player2.speed = 20;
@@ -263,10 +269,10 @@ void initialize() {
 
 	//ball1.velocity = ball1.acceleration;
 
-	ball1.force.x = ball1.forceMagnitude * sin(ball1.rotation);
+	/*ball1.force.x = ball1.forceMagnitude * sin(ball1.rotation);
 	ball1.force.y = ball1.forceMagnitude * -cos(ball1.rotation);
 
-	ball1.velocity = ball1.force / ball1.mass;
+	ball1.velocity = ball1.force / ball1.mass;*/
 
 	//default position///
 	///
@@ -308,49 +314,49 @@ void initialize() {
 	//	Create texture. Study the documentation.
 }
 
-double spriteHeight, spriteWidth;
-
-RECT spriteOutputCycle(RECT& spriteRect, int textureWidth, int textureHeight, int col, int row, int maxFrames, int& frameCount) {
-	spriteHeight = textureHeight / row;
-	spriteWidth = textureWidth / col;
-
-	if (counter % 1 == 0) {
-		spriteRect.top = frameCount / row * spriteHeight;
-		spriteRect.bottom = spriteRect.top + spriteHeight;
-
-		spriteRect.left = frameCount % col * spriteWidth;
-		spriteRect.right = spriteRect.left + spriteWidth;
-
-		frameCount++;
-
-		if (frameCount >= maxFrames) {
-			frameCount = 0;
-		}
-	}
-
-	return spriteRect;
-}
-
-RECT charSpriteOutputCycle(RECT& spriteRect, int textureWidth, int textureHeight, int col, int row, int charState, int maxFrames, int& frameCount) {
-	spriteHeight = textureHeight / row;
-	spriteWidth = textureWidth / col;
-
-	if (counter % 1 == 0) {
-		spriteRect.top = charState * spriteHeight;
-		spriteRect.bottom = spriteRect.top + spriteHeight;
-
-		spriteRect.left = frameCount % col * spriteWidth;
-		spriteRect.right = spriteRect.left + spriteWidth;
-
-		frameCount++;
-
-		if (frameCount >= maxFrames) {
-			frameCount = 0;
-		}
-	}
-
-	return spriteRect;
-}
+//double spriteHeight, spriteWidth;
+//
+//RECT spriteOutputCycle(RECT& spriteRect, int textureWidth, int textureHeight, int col, int row, int maxFrames, int& frameCount) {
+//	spriteHeight = textureHeight / row;
+//	spriteWidth = textureWidth / col;
+//
+//	if (counter % 1 == 0) {
+//		spriteRect.top = frameCount / row * spriteHeight;
+//		spriteRect.bottom = spriteRect.top + spriteHeight;
+//
+//		spriteRect.left = frameCount % col * spriteWidth;
+//		spriteRect.right = spriteRect.left + spriteWidth;
+//
+//		frameCount++;
+//
+//		if (frameCount >= maxFrames) {
+//			frameCount = 0;
+//		}
+//	}
+//
+//	return spriteRect;
+//}
+//
+//RECT charSpriteOutputCycle(RECT& spriteRect, int textureWidth, int textureHeight, int col, int row, int charState, int maxFrames, int& frameCount) {
+//	spriteHeight = textureHeight / row;
+//	spriteWidth = textureWidth / col;
+//
+//	if (counter % 1 == 0) {
+//		spriteRect.top = charState * spriteHeight;
+//		spriteRect.bottom = spriteRect.top + spriteHeight;
+//
+//		spriteRect.left = frameCount % col * spriteWidth;
+//		spriteRect.right = spriteRect.left + spriteWidth;
+//
+//		frameCount++;
+//
+//		if (frameCount >= maxFrames) {
+//			frameCount = 0;
+//		}
+//	}
+//
+//	return spriteRect;
+//}
 
 //	use int main if you want to have a console to print out message
 //int main()
@@ -360,6 +366,12 @@ RECT charSpriteOutputCycle(RECT& spriteRect, int textureWidth, int textureHeight
 //hPrevInstance = ID number of the instance of the PARENT of this window (OBSOLETE)
 //lp CmdLine = POINTER to a command line string
 //nShowCmd = style
+
+int gameStage = 1;
+
+int result = 0;
+int score1 = 0;
+int score2 = 0;
 
 int main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
@@ -391,18 +403,33 @@ int main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nSho
 		Render()
 		PlaySound()
 		*/
-		if (gameStart == false) {
+		switch (gameStage) {
+		case 1: {
 			start.getInput(dInputKeyboardDevice, diKeys);
-			gameStart = start.update(myTimer.framesToUpdate());
-			start.render();
+			gameStage = start.update(myTimer.framesToUpdate());
+			start.render(d3dDevice);
 			start.playSound();
+			break;
 		}
-		else {
+		case 2: {
 			startGame.getInput(dInputKeyboardDevice, diKeys);
-			gameStart = startGame.update(myTimer.framesToUpdate(), &counter, &player1, &player2, &ball1);
+			gameStage = startGame.update(myTimer.framesToUpdate(), &counter, &player1, &player2, &ball1, &score1, &score2);
 			startGame.render(d3dDevice, &sprite, &line, &player1, &player2, &ball1);
+			startGame.playSound();
+			break;
 		}
-		cout << "ball1x: " << ball1.velocity.x << " ball1y: " << ball1.velocity.y << endl;
+		case 3: {
+			gameOver.getInput(dInputKeyboardDevice, diKeys);
+			gameStage = gameOver.update(myTimer.framesToUpdate(), &score1, &score2);
+			gameOver.render(d3dDevice);
+			gameOver.playSound();
+			break;
+		}
+		default: {
+			cout << "No game??? How it skip the others, or maybe return gameStage error. Go check :)" << endl;
+			break;
+		}
+		}
 	}
 
 	cleanupDirectX();
