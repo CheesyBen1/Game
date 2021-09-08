@@ -19,7 +19,7 @@ void menu::getInput(LPDIRECTINPUTDEVICE8 dInputKeyboardDevice, BYTE diKeys[256])
 	}
 }
 
-bool menu::update(int framesToUpdate) {
+int menu::update(int framesToUpdate) {
 	if (escMenuKey) {
 		PostQuitMessage(0);
 
@@ -29,8 +29,12 @@ bool menu::update(int framesToUpdate) {
 	if (enterMenuKey) {
 		enterMenuKey = false;
 
-		return true;
+		return 2;
 	}
+
+	std::cout << "Menu (add UI, start exit buttons), Press Enter to start" << std::endl;
+
+	return 1;
 }
 void menu::render() {
 }
