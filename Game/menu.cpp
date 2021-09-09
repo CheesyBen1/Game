@@ -19,7 +19,7 @@ void menu::getInput(LPDIRECTINPUTDEVICE8 dInputKeyboardDevice, BYTE diKeys[256])
 	}
 }
 
-int menu::update(int framesToUpdate) {
+int menu::update(int framesToUpdate, player* playerP1, player* playerP2, ball* ballP, int* scoreOne, int* scoreTwo) {
 	if (escMenuKey) {
 		PostQuitMessage(0);
 
@@ -36,7 +36,7 @@ int menu::update(int framesToUpdate) {
 
 	return 1;
 }
-void menu::render(IDirect3DDevice9* d3dDevice) {
+void menu::render(IDirect3DDevice9* d3dDevice, LPD3DXSPRITE* spriteP, LPD3DXLINE* lineP, player* playerP1, player* playerP2, ball* ballP) {
 	d3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
 
 	d3dDevice->BeginScene();
