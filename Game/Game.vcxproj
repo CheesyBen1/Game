@@ -144,9 +144,9 @@
   <ItemGroup>
     <ClCompile Include="ball.cpp" />
     <ClCompile Include="FrameTimer.cpp" />
+    <ClCompile Include="game.cpp" />
     <ClCompile Include="gameO.cpp" />
     <ClCompile Include="gameS.cpp" />
-    <ClCompile Include="gameState.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="Source.cpp" />
@@ -154,9 +154,9 @@
   <ItemGroup>
     <ClInclude Include="ball.h" />
     <ClInclude Include="FrameTimer.h" />
+    <ClInclude Include="game.h" />
     <ClInclude Include="gameO.h" />
     <ClInclude Include="gameS.h" />
-    <ClInclude Include="gameState.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="resource.h" />

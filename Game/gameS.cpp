@@ -82,12 +82,13 @@ bool checkCol(D3DXVECTOR2 aPos, int aHeight, int aWidth, D3DXVECTOR2 bPos, int b
 	}
 }
 
-int gameS::update(int framesToUpdate, int* counterP, player* playerP1, player* playerP2, ball* ballP, int* scoreOne, int* scoreTwo)
+int countdown = 0;
+
+int gameS::update(int framesToUpdate, player* playerP1, player* playerP2, ball* ballP, int* scoreOne, int* scoreTwo)
 {
 	player& player1 = *playerP1;
 	player& player2 = *playerP2;
 	ball& ball1 = *ballP;
-	int& counter = *counterP;
 
 	int& score1 = *scoreOne;
 	int& score2 = *scoreTwo;
@@ -200,8 +201,15 @@ int gameS::update(int framesToUpdate, int* counterP, player* playerP1, player* p
 
 	if (ball1.position.y < 0 || ball1.position.y > WINDOWHEIGHT - ball1.height * ball1.scaling.y) {
 		ball1.velocity.y *= -1;
-		ball1.velocity *= 1.05;
-		ball1.velocity.x *= 1.07;
+
+		if (pow(ball1.velocity.x, 2) > 1) {
+			ball1.velocity *= 1.02;
+		}
+		else {
+			ball1.velocity.x += 1;
+		}
+
+		ball1.velocity.x *= 1.01;
 
 		if (ball1.position.y < 0) {
 			ball1.position.y = 0;
@@ -211,11 +219,11 @@ int gameS::update(int framesToUpdate, int* counterP, player* playerP1, player* p
 		}
 	}
 
-	if (checkCol(player1.position, 128, 32, ball1.position, 32, 32)) {
-		ball1.position.x = player1.position.x + 33;
+	if (checkCol(player1.position, player1.height * player1.scaling.y, player1.width, ball1.position, ball1.height * ball1.scaling.y * 2, ball1.width * ball1.scaling.x * 2)) {
+		ball1.position.x = player1.position.x + player1.width + 1;
 		ball1.velocity.x *= -1;
-		ball1.velocity *= 1.05;
-		ball1.velocity.y *= 1.07;
+
+		ball1.velocity.y *= 1.01;
 
 		red = 255;
 		green = 0;
@@ -229,11 +237,11 @@ int gameS::update(int framesToUpdate, int* counterP, player* playerP1, player* p
 		}
 	}
 
-	if (checkCol(player2.position, 128, 32, ball1.position, 32, 32)) {
-		ball1.position.x = player2.position.x - 33;
+	if (checkCol(player2.position, player2.height * player2.scaling.y, player2.width, ball1.position, ball1.height * ball1.scaling.y * 2, ball1.width * ball1.scaling.x * 2)) {
+		ball1.position.x = player2.position.x - player2.width - 1 - ball1.width * ball1.scaling.x;
 		ball1.velocity.x *= -1;
-		ball1.velocity *= 1.05;
-		ball1.velocity.x *= 1.02;
+
+		ball1.velocity.y *= 1.01;
 
 		red = 0;
 		green = 0;
@@ -273,8 +281,6 @@ int gameS::update(int framesToUpdate, int* counterP, player* playerP1, player* p
 	/*cout << "ball1x: " << ball1.velocity.x << " ball1y: " << ball1.velocity.y << endl;*/
 
 	cout << "rotation: " << ball1.rotation << endl;
-
-	counter++;
 
 	return 2;
 }

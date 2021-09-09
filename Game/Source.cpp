@@ -19,6 +19,8 @@
 #include "gameS.h"
 #include "gameO.h"
 
+#include "game.h"
+
 #define WINDOW_CLASS_NAME "Ping Pang"
 #define WINDOWWIDTH 800
 #define WINDOWHEIGHT 600
@@ -53,10 +55,6 @@ DIMOUSESTATE mouseState;
 float xMouse = 300, yMouse = 400;
 
 int counter = 0;
-
-menu start;
-gameS startGame;
-gameO gameOver;
 
 //	Window Procedure, for event handling
 //hWnd - handle the windows that sent this message
@@ -284,7 +282,7 @@ void initialize() {
 	player2.scaling = D3DXVECTOR2(0.5f, 0.5f);
 	player2.position = D3DXVECTOR2(WINDOWWIDTH - 50, WINDOWHEIGHT / 2 - (player2.height / 2) * player2.scaling.x);
 
-	ball1.scaling = D3DXVECTOR2(0.3f, 0.3f);
+	ball1.scaling = D3DXVECTOR2(0.25f, 0.25f);
 	ball1.position = D3DXVECTOR2((WINDOWWIDTH / 2) - ball1.width / 2 * ball1.scaling.x, (WINDOWHEIGHT / 2) - ball1.height / 2 * ball1.scaling.y);
 
 	//RECT//
@@ -392,6 +390,12 @@ int main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nSho
 	FrameTimer myTimer;
 	myTimer.init(60);
 
+	menu start;
+	gameS startGame;
+	gameO gameOver;
+
+	game& gameState = startGame;
+
 	dInputKeyboardDevice->Acquire();
 	dInputMouseDevice->Acquire();
 
@@ -402,34 +406,40 @@ int main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nSho
 		Update()
 		Render()
 		PlaySound()
+
 		*/
-		switch (gameStage) {
+
+		gameState.getInput(dInputKeyboardDevice, diKeys);
+		gameState.update(myTimer.framesToUpdate(), &player1, &player2, &ball1, &score1, &score2);
+		gameState.render(d3dDevice, &sprite, &line, &player1, &player2, &ball1);
+		gameState.playSound();
+		/*switch (gameStage) {
 		case 1: {
 			start.getInput(dInputKeyboardDevice, diKeys);
-			gameStage = start.update(myTimer.framesToUpdate());
-			start.render(d3dDevice);
+			gameStage = start.update(myTimer.framesToUpdate(), &player1, &player2, &ball1, &score1, &score2);
+			start.render(d3dDevice, &sprite, &line, &player1, &player2, &ball1);
 			start.playSound();
 			break;
 		}
 		case 2: {
 			startGame.getInput(dInputKeyboardDevice, diKeys);
-			gameStage = startGame.update(myTimer.framesToUpdate(), &counter, &player1, &player2, &ball1, &score1, &score2);
+			gameStage = startGame.update(myTimer.framesToUpdate(), &player1, &player2, &ball1, &score1, &score2);
 			startGame.render(d3dDevice, &sprite, &line, &player1, &player2, &ball1);
 			startGame.playSound();
 			break;
 		}
 		case 3: {
 			gameOver.getInput(dInputKeyboardDevice, diKeys);
-			gameStage = gameOver.update(myTimer.framesToUpdate(), &score1, &score2);
-			gameOver.render(d3dDevice);
+			gameStage = gameOver.update(myTimer.framesToUpdate(), &player1, &player2, &ball1, &score1, &score2);
+			gameOver.render(d3dDevice, &sprite, &line, &player1, &player2, &ball1);
 			gameOver.playSound();
 			break;
 		}
 		default: {
-			cout << "No game??? How it skip the others, or maybe return gameStage error. Go check :)" << endl;
+			cout << "No game? How it skip the others, or maybe return gameStage error. Go check :)" << endl;
 			break;
 		}
-		}
+		}*/
 	}
 
 	cleanupDirectX();
