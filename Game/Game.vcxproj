@@ -150,6 +150,7 @@
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="states.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ball.h" />
@@ -161,6 +162,7 @@
     <ClInclude Include="player.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Source.h" />
+    <ClInclude Include="states.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="p2.rc" />

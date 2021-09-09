@@ -1,4 +1,5 @@
 #include "gameS.h"
+#include "gameO.h"
 
 const double pi = 3.14159265358979323846;
 
@@ -20,11 +21,104 @@ int reset = 0;
 D3DXVECTOR2 lineVertices[] = { D3DXVECTOR2((WINDOWWIDTH / 2) - 1,0), D3DXVECTOR2(WINDOWWIDTH / 2 - 1, WINDOWHEIGHT) };
 D3DXVECTOR2 lineVertices2[] = { D3DXVECTOR2((WINDOWWIDTH / 2) + 1,0), D3DXVECTOR2(WINDOWWIDTH / 2 + 1, WINDOWHEIGHT) };
 
-gameS::gameS()
+gameS gameS::gameStartState;
+
+void gameS::init(IDirect3DDevice9* d3dDevice)
+{
+	HRESULT hr;
+
+	hr = D3DXCreateSprite(d3dDevice, &sprite);
+	testFail(hr, "sprite");
+
+	ball1.mass = 10;
+	ball1.forceMagnitude = 100;
+
+	//ball1.rotation = random(6);
+
+	player1.speed = 20;
+	player2.speed = 20;
+
+	player1.height = 256;
+	player1.width = 32;
+
+	player2.height = 256;
+	player2.width = 32;
+
+	ball1.height = 64;
+	ball1.width = 64;
+
+	//ball1.velocity = ball1.acceleration;
+
+	/*ball1.force.x = ball1.forceMagnitude * sin(ball1.rotation);
+	ball1.force.y = ball1.forceMagnitude * -cos(ball1.rotation);
+
+	ball1.velocity = ball1.force / ball1.mass;*/
+
+	//default position///
+	///
+	///
+
+	player1.scaling = D3DXVECTOR2(0.5f, 0.5f);
+	player1.position = D3DXVECTOR2(50 - player1.width * player1.scaling.x, WINDOWHEIGHT / 2 - (player1.height / 2) * player1.scaling.x);
+
+	player2.scaling = D3DXVECTOR2(0.5f, 0.5f);
+	player2.position = D3DXVECTOR2(WINDOWWIDTH - 50, WINDOWHEIGHT * 0.5 - (player2.height * 0.5) * player2.scaling.x);
+
+	ball1.scaling = D3DXVECTOR2(0.25f, 0.25f);
+	ball1.position = D3DXVECTOR2((WINDOWWIDTH * 0.5) - ball1.width * 0.5 * ball1.scaling.x, (WINDOWHEIGHT * 0.5) - ball1.height * 0.5 * ball1.scaling.y);
+
+	//RECT//
+	////////////////
+	/////////////////
+
+	player2.rect = setRECT(0, 0, 32, 256);
+	player1.rect = setRECT(32, 0, 64, 256);
+	ball1.rect = setRECT(0, 0, 64, 64);
+
+	//sprites//
+	///////////////////////
+	////////////////////////
+
+	hr = D3DXCreateTextureFromFile(d3dDevice, "bars.png", &player1.texture);
+	testFail(hr, "player1 texture");
+
+	hr = D3DXCreateTextureFromFile(d3dDevice, "bars.png", &player2.texture);
+	testFail(hr, "player2 texture");
+
+	hr = D3DXCreateTextureFromFile(d3dDevice, "ball.png", &ball1.texture);
+	testFail(hr, "ball texture");
+
+	hr = D3DXCreateLine(d3dDevice, &line);
+	testFail(hr, "line");
+}
+
+void gameS::cleanup()
+{
+	sprite->Release();
+	sprite = NULL;
+
+	player1.texture->Release();
+	player1.texture = NULL;
+
+	player2.texture->Release();
+	player2.texture = NULL;
+
+	ball1.texture->Release();
+	ball1.texture = NULL;
+
+	line->Release();
+	line = NULL;
+}
+
+void gameS::pause()
 {
 }
 
-void gameS::getInput(LPDIRECTINPUTDEVICE8 dInputKeyboardDevice, BYTE diKeys[256])
+void gameS::resume()
+{
+}
+
+void gameS::getInput(game* games, LPDIRECTINPUTDEVICE8& dInputKeyboardDevice)
 {
 	dInputKeyboardDevice->GetDeviceState(256, diKeys);
 
@@ -52,7 +146,7 @@ void gameS::getInput(LPDIRECTINPUTDEVICE8 dInputKeyboardDevice, BYTE diKeys[256]
 	}
 }
 
-int aPosXL, aPosXR, aPosYU, aPosYD, bPosXL, bPosXR, bPosYU, bPosYD;
+float aPosXL, aPosXR, aPosYU, aPosYD, bPosXL, bPosXR, bPosYU, bPosYD;
 
 bool checkCol(D3DXVECTOR2 aPos, int aHeight, int aWidth, D3DXVECTOR2 bPos, int bHeight, int bWidth) {
 	aPosXL = aPos.x;
@@ -84,15 +178,8 @@ bool checkCol(D3DXVECTOR2 aPos, int aHeight, int aWidth, D3DXVECTOR2 bPos, int b
 
 int countdown = 0;
 
-int gameS::update(int framesToUpdate, player* playerP1, player* playerP2, ball* ballP, int* scoreOne, int* scoreTwo)
+void gameS::update(game* games, int framesToUpdate, int& scoreOne, int& scoreTwo)
 {
-	player& player1 = *playerP1;
-	player& player2 = *playerP2;
-	ball& ball1 = *ballP;
-
-	int& score1 = *scoreOne;
-	int& score2 = *scoreTwo;
-
 	if (reset == 0) {
 		srand(time(NULL));
 
@@ -184,32 +271,25 @@ int gameS::update(int framesToUpdate, player* playerP1, player* playerP2, ball* 
 		if (ball1.position.x < 0) {
 			ball1.velocity = D3DXVECTOR2(0, 0);
 
-			score2++;
+			scoreTwo++;
 			reset = 0;
 
-			return 3;
+			games->changeState(gameO::instance());
 		}
 		if (ball1.position.x > WINDOWWIDTH - ball1.width * ball1.scaling.x) {
 			ball1.velocity = D3DXVECTOR2(0, 0);
 
-			score1++;
+			scoreOne++;
 			reset = 0;
 
-			return 3;
+			games->changeState(gameO::instance());
 		}
 	}
 
 	if (ball1.position.y < 0 || ball1.position.y > WINDOWHEIGHT - ball1.height * ball1.scaling.y) {
 		ball1.velocity.y *= -1;
-
-		if (pow(ball1.velocity.x, 2) > 1) {
-			ball1.velocity *= 1.02;
-		}
-		else {
-			ball1.velocity.x += 1;
-		}
-
-		ball1.velocity.x *= 1.01;
+		ball1.velocity *= 1.05;
+		ball1.velocity.x *= 1.07;
 
 		if (ball1.position.y < 0) {
 			ball1.position.y = 0;
@@ -219,11 +299,11 @@ int gameS::update(int framesToUpdate, player* playerP1, player* playerP2, ball* 
 		}
 	}
 
-	if (checkCol(player1.position, player1.height * player1.scaling.y, player1.width, ball1.position, ball1.height * ball1.scaling.y * 2, ball1.width * ball1.scaling.x * 2)) {
-		ball1.position.x = player1.position.x + player1.width + 1;
+	if (checkCol(player1.position, 128, 32, ball1.position, 32, 32)) {
+		ball1.position.x = player1.position.x + 33;
 		ball1.velocity.x *= -1;
-
-		ball1.velocity.y *= 1.01;
+		ball1.velocity *= 1.05;
+		ball1.velocity.y *= 1.07;
 
 		red = 255;
 		green = 0;
@@ -237,11 +317,11 @@ int gameS::update(int framesToUpdate, player* playerP1, player* playerP2, ball* 
 		}
 	}
 
-	if (checkCol(player2.position, player2.height * player2.scaling.y, player2.width, ball1.position, ball1.height * ball1.scaling.y * 2, ball1.width * ball1.scaling.x * 2)) {
-		ball1.position.x = player2.position.x - player2.width - 1 - ball1.width * ball1.scaling.x;
+	if (checkCol(player2.position, 128, 32, ball1.position, 32, 32)) {
+		ball1.position.x = player2.position.x - 33;
 		ball1.velocity.x *= -1;
-
-		ball1.velocity.y *= 1.01;
+		ball1.velocity *= 1.05;
+		ball1.velocity.x *= 1.02;
 
 		red = 0;
 		green = 0;
@@ -282,16 +362,16 @@ int gameS::update(int framesToUpdate, player* playerP1, player* playerP2, ball* 
 
 	cout << "rotation: " << ball1.rotation << endl;
 
-	return 2;
+	/*return 2;*/
 }
 
-void gameS::render(IDirect3DDevice9* d3dDevice, LPD3DXSPRITE* spriteP, LPD3DXLINE* lineP, player* playerP1, player* playerP2, ball* ballP)
+void gameS::render(game* games, IDirect3DDevice9* d3dDevice)
 {
-	player& player1 = *playerP1;
-	player& player2 = *playerP2;
-	ball& ball1 = *ballP;
-	LPD3DXSPRITE& sprite = *spriteP;
-	LPD3DXLINE& line = *lineP;
+	//player& player1 = *playerP1;
+	//player& player2 = *playerP2;
+	//ball& ball1 = *ballP;
+	//LPD3DXSPRITE& sprite = *spriteP;
+	//LPD3DXLINE& line = *lineP;
 
 	d3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
 
@@ -332,6 +412,6 @@ void gameS::render(IDirect3DDevice9* d3dDevice, LPD3DXSPRITE* spriteP, LPD3DXLIN
 	d3dDevice->Present(NULL, NULL, NULL, NULL);
 }
 
-void gameS::playSound()
+void gameS::playSound(game* games)
 {
 }

@@ -1,13 +1,35 @@
-#pragma once
-#include "gameState.h"
-#include "game.h"
+#ifndef MENUSTATE_H
+#define MENUSTATE_H
+
+#include "states.h"
+
 class menu :
-	public game
+	public states
 {
 public:
-	menu();
-	void getInput(LPDIRECTINPUTDEVICE8 dInputKeyboardDevice, BYTE diKeys[256]);
-	int update(int framesToUpdate, player* playerP1, player* playerP2, ball* ballP, int* scoreOne, int* scoreTwo);
-	void render(IDirect3DDevice9* d3dDevice, LPD3DXSPRITE* spriteP, LPD3DXLINE* lineP, player* playerP1, player* playerP2, ball* ballP);
-	void playSound();
+	void init(IDirect3DDevice9* d3dDevice);
+	void cleanup();
+
+	void pause();
+	void resume();
+
+	void getInput(game* games, LPDIRECTINPUTDEVICE8& dInputKeyboardDevice);
+	void update(game* games, int framesToUpdate, int& scoreOne, int& scoreTwo);
+	void render(game* games, IDirect3DDevice9* d3dDevice);
+	void playSound(game* games);
+
+	static menu* instance() {
+		return &menuState;
+	}
+
+protected:
+	menu() { }
+
+private:
+	static menu menuState;
+
+	LPD3DXSPRITE sprite = NULL;
+	LPD3DXLINE line = NULL;
+	BYTE diKeys[256];
 };
+#endif

@@ -1,6 +1,9 @@
+#ifndef GAME_H
+#define GAME_H
+
 #define WIN32_LEAN_AND_MEAN
 #define _USE_MATH_DEFINES
-#pragma once
+
 #include "ball.h"
 #include <cmath>
 #include <Windows.h>
@@ -9,15 +12,39 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 #include <dinput.h>
+#include <vector>
+#include "FrameTimer.h"
+
+using namespace std;
+
+class states;
 
 class game
 {
 private:
 
 public:
-	game() {};
-	virtual void getInput(LPDIRECTINPUTDEVICE8 dInputKeyboardDevice, BYTE diKeys[256]) = 0;
-	virtual int update(int framesToUpdate, player* playerP1, player* playerP2, ball* ballP, int* scoreOne, int* scoreTwo) = 0;
-	virtual void render(IDirect3DDevice9* d3dDevice, LPD3DXSPRITE* spriteP, LPD3DXLINE* lineP, player* playerP1, player* playerP2, ball* ballP) = 0;
-	virtual void playSound() = 0;
+	void init(LPCSTR Title, int WINDOWWIDTH, int WINDOWHEIGHT);
+	void cleanup();
+
+	void changeState(states* state);
+	void pushState(states* state);
+	void popState();
+
+	void getInput();
+	void update();
+	void render();
+	void playSound();
+
+	bool running();
+
+private:
+	vector<states*>stateStack;
+
+	int scoreOne = 0;
+	int scoreTwo = 0;
+
+	FrameTimer myTimer;
 };
+
+#endif

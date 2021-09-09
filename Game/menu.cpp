@@ -1,15 +1,30 @@
 #include "menu.h"
+#include "game.h"
+#include "states.h"
+#include "gameS.h"
 
 bool enterMenuKey = false;
 bool escMenuKey = false;
 
-LPDIRECTINPUTDEVICE8 dInputKeyboardDeviceMenu;
+menu menu::menuState;
 
-menu::menu()
+void menu::init(IDirect3DDevice9* d3dDevice)
 {
 }
 
-void menu::getInput(LPDIRECTINPUTDEVICE8 dInputKeyboardDevice, BYTE diKeys[256]) {
+void menu::cleanup()
+{
+}
+
+void menu::pause()
+{
+}
+
+void menu::resume()
+{
+}
+
+void menu::getInput(game* games, LPDIRECTINPUTDEVICE8& dInputKeyboardDevice) {
 	dInputKeyboardDevice->GetDeviceState(256, diKeys);
 	if (diKeys[DIK_ESCAPE] & 0x80) {
 		escMenuKey = true;
@@ -19,7 +34,7 @@ void menu::getInput(LPDIRECTINPUTDEVICE8 dInputKeyboardDevice, BYTE diKeys[256])
 	}
 }
 
-int menu::update(int framesToUpdate, player* playerP1, player* playerP2, ball* ballP, int* scoreOne, int* scoreTwo) {
+void menu::update(game* games, int framesToUpdate, int& scoreOne, int& scoreTwo) {
 	if (escMenuKey) {
 		PostQuitMessage(0);
 
@@ -28,15 +43,12 @@ int menu::update(int framesToUpdate, player* playerP1, player* playerP2, ball* b
 
 	if (enterMenuKey) {
 		enterMenuKey = false;
-
-		return 2;
+		games->changeState(gameS::instance());
 	}
 
 	std::cout << "Menu (add UI, start exit buttons), Press Enter to start" << std::endl;
-
-	return 1;
 }
-void menu::render(IDirect3DDevice9* d3dDevice, LPD3DXSPRITE* spriteP, LPD3DXLINE* lineP, player* playerP1, player* playerP2, ball* ballP) {
+void menu::render(game* games, IDirect3DDevice9* d3dDevice) {
 	d3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
 
 	d3dDevice->BeginScene();
@@ -48,5 +60,5 @@ void menu::render(IDirect3DDevice9* d3dDevice, LPD3DXSPRITE* spriteP, LPD3DXLINE
 	d3dDevice->Present(NULL, NULL, NULL, NULL);
 }
 
-void menu::playSound() {
+void menu::playSound(game* games) {
 }
