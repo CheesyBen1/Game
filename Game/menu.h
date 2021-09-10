@@ -11,6 +11,6 @@ public:
     bool update(int framesToUpdate);
     void render();
     void playSound();
-
+    void cleanUp();
 };
 

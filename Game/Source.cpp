@@ -816,7 +816,6 @@ int main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nSho
 
 	while (windowsRunning()) {
 		
-		
 		/*
 		Game ->
 		GetInput()
@@ -824,6 +823,8 @@ int main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nSho
 		Render()
 		PlaySound()
 		*/
+		//menu initialize
+		start.initialize();
 		if (gameStart == false) {
 			start.getInput(dInputKeyboardDevice, diKeys);
 			gameStart = start.update(myTimer.framesToUpdate());
@@ -839,8 +840,8 @@ int main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nSho
 		cout << "ball1x: " << ball1.velocity.x << " ball1y: " << ball1.velocity.y << endl;
 	}
 
-	
-	
+	//menu clean up
+	start.cleanUp();
 	cleanupDirectX();
 	
 	//	Free up the memory.

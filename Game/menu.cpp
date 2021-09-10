@@ -54,23 +54,22 @@ bool menu::update(int framesToUpdate) {
 }
 
 void menu::initialize() {
-	//Tittle text
-	textRect.left = 50;
-	textRect.top = -80;
-	textRect.right = 250;
-	textRect.bottom = 50;
+	textRect.left = WINDOWWIDTH / 2.3;
+	textRect.top = 0;
+	textRect.right = WINDOWWIDTH;
+	textRect.bottom = WINDOWWIDTH;
 
 	//Start text
-	startTextRect.left = 50;
-	startTextRect.top = -20;
-	startTextRect.right = 250;
-	startTextRect.bottom = 200;
+	startTextRect.left = WINDOWWIDTH / 2.3;
+	startTextRect.top = WINDOWWIDTH / 3.2;
+	startTextRect.right = WINDOWWIDTH;
+	startTextRect.bottom = WINDOWWIDTH;
 
 	//Quit text
-	endTextRect.left = 50;
-	endTextRect.top = 40;
-	endTextRect.right = 250;
-	endTextRect.bottom = 200;
+	endTextRect.left = WINDOWWIDTH / 2.3;
+	endTextRect.top = WINDOWHEIGHT / 1.9;
+	endTextRect.right = WINDOWWIDTH;
+	endTextRect.bottom = WINDOWWIDTH;
 }
 void menu::render() {
 
@@ -78,12 +77,12 @@ void menu::render() {
 
 	d3dDevice->BeginScene();
 
+	sprite->Begin(D3DXSPRITE_ALPHABLEND);
 
 	line->Begin();
 	line->Draw(lineVertices, 5, D3DCOLOR_XRGB(255, 255, 255));
 
-	sprite->Begin(D3DXSPRITE_ALPHABLEND);
-
+	
 	HRESULT hr = D3DXCreateFont(d3dDevice, 30, 0, 0, 1, false,
 		DEFAULT_CHARSET, OUT_TT_ONLY_PRECIS, DEFAULT_QUALITY,
 		DEFAULT_PITCH | FF_DONTCARE, "Arial", &font);
@@ -96,14 +95,25 @@ void menu::render() {
 		DEFAULT_CHARSET, OUT_TT_ONLY_PRECIS, DEFAULT_QUALITY,
 		DEFAULT_PITCH | FF_DONTCARE, "Arial", &endFont);
 
+	hr = D3DXCreateSprite(d3dDevice, &sprite);
+
 	font->DrawText(sprite, "Ping Pang", 9, &textRect, 0, D3DCOLOR_XRGB(255, 255, 255));
 	startFont->DrawText(sprite, "Start Game", 12, &startTextRect, 0, D3DCOLOR_XRGB(255, 255, 255));
 	endFont->DrawText(sprite, "Quit Game", 9, &endTextRect, 0, D3DCOLOR_XRGB(255, 255, 255));
 
 	sprite->End();
 	line->End();
+
 	d3dDevice->EndScene();
 	d3dDevice->Present(NULL, NULL, NULL, NULL);
+}
+void menu::playSound() {
+
+}
+void menu::cleanUp()
+{	
+	sprite->Release();
+	sprite = NULL;
 
 	font->Release();
 	font = NULL;
@@ -116,9 +126,6 @@ void menu::render() {
 
 	line->Release();
 	line = NULL;
-}
-
-void menu::playSound() {
 
 }
 //#endif
