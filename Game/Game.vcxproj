@@ -147,6 +147,7 @@
     <ClCompile Include="game.cpp" />
     <ClCompile Include="gameO.cpp" />
     <ClCompile Include="gameS.cpp" />
+    <ClCompile Include="gameW.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="Source.cpp" />
@@ -158,6 +159,7 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="gameO.h" />
     <ClInclude Include="gameS.h" />
+    <ClInclude Include="gameW.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="resource.h" />

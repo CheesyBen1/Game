@@ -43,28 +43,10 @@ void gameO::update(game* games, int framesToUpdate, int& scoreOne, int& scoreTwo
 		escOverKey = false;
 	}
 
-	if (scoreOne < 5 && scoreTwo < 5) {
-		cout << "Player 1 score: " << scoreOne << " Player 2 score: " << scoreTwo << "\tPlay till 5. Press SPACE to continue." << endl;
-		if (spaceOverKey) {
-			spaceOverKey = false;
-			games->changeState(gameS::instance());
-		}
-	}
-	else {
-		cout << "Game Over! ";
-		if (scoreOne == 5) {
-			cout << "Player 1 wins! ";
-		}
-		else if (scoreTwo == 5) {
-			cout << "Player 2 wins! ";
-		}
-		if (spaceOverKey) {
-			spaceOverKey = false;
-			scoreOne = 0;
-			scoreTwo = 0;
-			games->changeState(menu::instance());
-		}
-		cout << "Player 1 score: " << scoreOne << " Player 2 score: " << scoreTwo << " Press SPACE to restart game." << endl;
+	cout << "Player 1 score: " << scoreOne << " Player 2 score: " << scoreTwo << "\tPlay till 5. Press SPACE to continue." << endl;
+	if (spaceOverKey) {
+		spaceOverKey = false;
+		games->changeState(gameS::instance());
 	}
 
 	//std::cout << "Game Over. Player " << result << " wins. Press Enter to Retart" << std::endl;

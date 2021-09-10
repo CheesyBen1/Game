@@ -8,8 +8,6 @@
 #define WINDOWWIDTH 800
 #define WINDOWHEIGHT 600
 
-using namespace std;
-
 class gameS :
 	public states
 {
@@ -50,8 +48,8 @@ private:
 	LPD3DXLINE line = NULL;
 	BYTE diKeys[256];
 
-	player player1;
-	player player2;
+	ball player1;
+	ball player2;
 	ball ball1;
 };
 #endif
