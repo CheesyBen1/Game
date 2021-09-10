@@ -42,6 +42,9 @@
     <ClCompile Include="states.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="gameW.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -72,6 +75,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="states.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gameW.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

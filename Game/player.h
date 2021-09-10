@@ -18,6 +18,7 @@ public:
 
 	int speed;
 
-	int moveX = 0;
-	int moveY = 0;
+	int spriteFrame = 0;
+
+	D3DXVECTOR2 move = D3DXVECTOR2(0.0f, 0.0f);
 };
