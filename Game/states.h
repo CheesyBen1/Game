@@ -27,7 +27,7 @@ public:
 	virtual void pause() = 0;
 	virtual void resume() = 0;
 
-	virtual void getInput(game* games, LPDIRECTINPUTDEVICE8& dInputKeyboardDevice) = 0;
+	virtual void getInput(game* games, LPDIRECTINPUTDEVICE8& dInputKeyboardDevice, LPDIRECTINPUTDEVICE8& dInputMouseDevice) = 0;
 	virtual void update(game* games, int framesToUpdate, int& scoreOne, int& scoreTwo) = 0;
 	virtual void render(game* games, IDirect3DDevice9* d3dDevice) = 0;
 	virtual void playSound(game* games) = 0;

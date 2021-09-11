@@ -24,7 +24,7 @@ void gameO::resume()
 {
 }
 
-void gameO::getInput(game* games, LPDIRECTINPUTDEVICE8& dInputKeyboardDevice)
+void gameO::getInput(game* games, LPDIRECTINPUTDEVICE8& dInputKeyboardDevice, LPDIRECTINPUTDEVICE8& dInputMouseDevice)
 {
 	dInputKeyboardDevice->GetDeviceState(256, diKeys);
 	if (diKeys[DIK_ESCAPE] & 0x80) {

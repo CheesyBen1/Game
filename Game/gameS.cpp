@@ -159,7 +159,7 @@ void gameS::resume()
 {
 }
 
-void gameS::getInput(game* games, LPDIRECTINPUTDEVICE8& dInputKeyboardDevice)
+void gameS::getInput(game* games, LPDIRECTINPUTDEVICE8& dInputKeyboardDevice, LPDIRECTINPUTDEVICE8& dInputMouseDevice)
 {
 	dInputKeyboardDevice->GetDeviceState(256, diKeys);
 
@@ -202,36 +202,6 @@ void gameS::getInput(game* games, LPDIRECTINPUTDEVICE8& dInputKeyboardDevice)
 		escStartKey = true;
 	}
 }
-
-//float aPosXL, aPosXR, aPosYU, aPosYD, bPosXL, bPosXR, bPosYU, bPosYD;
-//
-//bool checkCol(D3DXVECTOR2 aPos, int aHeight, int aWidth, D3DXVECTOR2 bPos, int bHeight, int bWidth) {
-//	aPosXL = aPos.x;
-//	aPosXR = aPos.x + aWidth;
-//	aPosYU = aPos.y;
-//	aPosYD = aPos.y + aHeight;
-//
-//	bPosXL = bPos.x;
-//	bPosXR = bPos.x + bWidth;
-//	bPosYU = bPos.y;
-//	bPosYD = bPos.y + bHeight;
-//
-//	if (aPosXR < bPosXL) {
-//		return false;
-//	}
-//	else if (aPosXL > bPosXR) {
-//		return false;
-//	}
-//	else if (aPosYD < bPosYU) {
-//		return false;
-//	}
-//	else if (aPosYU > bPosYD) {
-//		return false;
-//	}
-//	else {
-//		return true;
-//	}
-//}
 
 bool colBox(ball& thing, float left, float right, float top, float bottom) {
 	if (thing.position.y<top || thing.position.y>(bottom - thing.radius * 2))

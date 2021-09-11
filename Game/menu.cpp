@@ -24,7 +24,7 @@ void menu::resume()
 {
 }
 
-void menu::getInput(game* games, LPDIRECTINPUTDEVICE8& dInputKeyboardDevice) {
+void menu::getInput(game* games, LPDIRECTINPUTDEVICE8& dInputKeyboardDevice, LPDIRECTINPUTDEVICE8& dInputMouseDevice) {
 	dInputKeyboardDevice->GetDeviceState(256, diKeys);
 	if (diKeys[DIK_ESCAPE] & 0x80) {
 		escMenuKey = true;
