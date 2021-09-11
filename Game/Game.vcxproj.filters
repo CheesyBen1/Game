@@ -87,31 +87,4 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="p2.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="arrowcop.cur">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="arrow.cur">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="nodrop.cur">
-      <Filter>Resource Files</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\..\..\.school\Computer Games Programming\praticals\P4\04.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\..\..\.school\Computer Games Programming\praticals\P4\numbers.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="bars.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-  </ItemGroup>
 </Project>

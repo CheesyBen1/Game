@@ -62,9 +62,9 @@ void createWindow(LPCSTR Title, int WINDOWWIDTH, int WINDOWHEIGHT) {
 	//	Create the Window.
 
 	//	You are to refer to MSDN for each of the parameters details.
-	g_hWnd = CreateWindowEx(0, wndClass.lpszClassName, Title, WS_OVERLAPPEDWINDOW, 0, 100, WINDOWWIDTH, WINDOWHEIGHT, NULL, NULL, GetModuleHandle(NULL), NULL);
+	g_hWnd = CreateWindowEx(0, wndClass.lpszClassName, Title, WS_OVERLAPPEDWINDOW, 100, 100, WINDOWWIDTH, WINDOWHEIGHT, NULL, NULL, GetModuleHandle(NULL), NULL);
 	ShowWindow(g_hWnd, 1);
-	ShowCursor(true);
+	ShowCursor(false);
 
 	//	Some interesting function to try out.
 	//	ShowCursor(false);
@@ -203,7 +203,7 @@ void game::popState()
 
 void game::getInput()
 {
-	stateStack.back()->getInput(this, dInputKeyboardDevice);
+	stateStack.back()->getInput(this, dInputKeyboardDevice, dInputMouseDevice);
 }
 
 void game::update()

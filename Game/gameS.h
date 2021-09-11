@@ -18,7 +18,7 @@ public:
 	void pause();
 	void resume();
 
-	void getInput(game* games, LPDIRECTINPUTDEVICE8& dInputKeyboardDevice);
+	void getInput(game* games, LPDIRECTINPUTDEVICE8& dInputKeyboardDevice, LPDIRECTINPUTDEVICE8& dInputMouseDevice);
 	void update(game* games, int framesToUpdate, int& scoreOne, int& scoreTwo);
 	void render(game* games, IDirect3DDevice9* d3dDevice);
 	void playSound(game* games);

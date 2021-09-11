@@ -168,19 +168,6 @@
     <ClInclude Include="Source.h" />
     <ClInclude Include="states.h" />
   </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="p2.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="arrow.cur" />
-    <None Include="arrowcop.cur" />
-    <None Include="nodrop.cur" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\..\..\.school\Computer Games Programming\praticals\P4\04.bmp" />
-    <Image Include="..\..\..\.school\Computer Games Programming\praticals\P4\numbers.bmp" />
-    <Image Include="bars.png" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
