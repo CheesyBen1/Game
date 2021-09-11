@@ -8,6 +8,7 @@ IDirect3DDevice9* d3dDevice;
 
 LPDIRECTINPUT8 dInput; //	Direct Input object.
 LPDIRECTINPUTDEVICE8  dInputKeyboardDevice; //	Direct Input keyboard device.
+LPDIRECTINPUTDEVICE8  dInputMouseDevice; //	Direct Input mouse device.
 
 LRESULT CALLBACK WindowProcedure(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -105,11 +106,17 @@ void createInput() {
 	hr = dInput->CreateDevice(GUID_SysKeyboard, &dInputKeyboardDevice, NULL);
 	testFail(hr, "keyboardDevice");
 
+	//create mouse device
+	hr = dInput->CreateDevice(GUID_SysMouse, &dInputMouseDevice, NULL);
+	testFail(hr, "mouseDevice");
+
 	//	Set the input data format.
 	dInputKeyboardDevice->SetDataFormat(&c_dfDIKeyboard);
+	dInputMouseDevice->SetDataFormat(&c_dfDIMouse);
 
 	//	Set the cooperative level.
 	dInputKeyboardDevice->SetCooperativeLevel(g_hWnd, DISCL_BACKGROUND | DISCL_NONEXCLUSIVE);
+	dInputMouseDevice->SetCooperativeLevel(g_hWnd, DISCL_BACKGROUND | DISCL_NONEXCLUSIVE);
 }
 
 void game::init(LPCSTR Title, int WINDOWWIDTH, int WINDOWHEIGHT)
@@ -124,6 +131,7 @@ void game::init(LPCSTR Title, int WINDOWWIDTH, int WINDOWHEIGHT)
 	createInput();
 
 	dInputKeyboardDevice->Acquire();
+	dInputMouseDevice->Acquire();
 
 	myTimer.init(60);
 }

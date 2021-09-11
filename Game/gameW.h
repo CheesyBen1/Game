@@ -31,5 +31,7 @@ private:
 	LPD3DXSPRITE sprite = NULL;
 	LPD3DXLINE line = NULL;
 	BYTE diKeys[256];
+
+	Audio* sounds;
 };
 #endif

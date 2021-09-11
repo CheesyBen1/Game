@@ -48,6 +48,8 @@ private:
 	LPD3DXLINE line = NULL;
 	BYTE diKeys[256];
 
+	Audio* sounds;
+
 	ball player1;
 	ball player2;
 	ball ball1;

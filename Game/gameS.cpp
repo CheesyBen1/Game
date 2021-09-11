@@ -23,6 +23,8 @@ int blue = 255;
 
 int reset = 0;
 
+bool hitSound = false;
+
 D3DXVECTOR2 lineVertices[] = { D3DXVECTOR2((WINDOWWIDTH / 2) - 1,0), D3DXVECTOR2(WINDOWWIDTH / 2 - 1, WINDOWHEIGHT) };
 D3DXVECTOR2 lineVertices2[] = { D3DXVECTOR2((WINDOWWIDTH / 2) + 1,0), D3DXVECTOR2(WINDOWWIDTH / 2 + 1, WINDOWHEIGHT) };
 
@@ -93,7 +95,7 @@ void gameS::init(IDirect3DDevice9* d3dDevice)
 	player2.radius = player2.height * player2.scaling.y * 0.5;
 
 	player1.friction = player2.friction = 0.01;
-	ball1.friction = 0.01;
+	ball1.friction = 0;
 
 	player2.rotation = pi * 1.5;
 	player1.rotation = pi * 0.5;
@@ -121,6 +123,14 @@ void gameS::init(IDirect3DDevice9* d3dDevice)
 
 	hr = D3DXCreateLine(d3dDevice, &line);
 	testFail(hr, "line");
+
+	//sounds//
+
+	sounds = new Audio;
+	sounds->initializeAudio();
+	sounds->loadSounds("bounce.mp3", "bensound-happyrock.mp3");
+
+	//sounds->playSoundtrack();
 }
 
 void gameS::cleanup()
@@ -193,37 +203,37 @@ void gameS::getInput(game* games, LPDIRECTINPUTDEVICE8& dInputKeyboardDevice)
 	}
 }
 
-float aPosXL, aPosXR, aPosYU, aPosYD, bPosXL, bPosXR, bPosYU, bPosYD;
+//float aPosXL, aPosXR, aPosYU, aPosYD, bPosXL, bPosXR, bPosYU, bPosYD;
+//
+//bool checkCol(D3DXVECTOR2 aPos, int aHeight, int aWidth, D3DXVECTOR2 bPos, int bHeight, int bWidth) {
+//	aPosXL = aPos.x;
+//	aPosXR = aPos.x + aWidth;
+//	aPosYU = aPos.y;
+//	aPosYD = aPos.y + aHeight;
+//
+//	bPosXL = bPos.x;
+//	bPosXR = bPos.x + bWidth;
+//	bPosYU = bPos.y;
+//	bPosYD = bPos.y + bHeight;
+//
+//	if (aPosXR < bPosXL) {
+//		return false;
+//	}
+//	else if (aPosXL > bPosXR) {
+//		return false;
+//	}
+//	else if (aPosYD < bPosYU) {
+//		return false;
+//	}
+//	else if (aPosYU > bPosYD) {
+//		return false;
+//	}
+//	else {
+//		return true;
+//	}
+//}
 
-bool checkCol(D3DXVECTOR2 aPos, int aHeight, int aWidth, D3DXVECTOR2 bPos, int bHeight, int bWidth) {
-	aPosXL = aPos.x;
-	aPosXR = aPos.x + aWidth;
-	aPosYU = aPos.y;
-	aPosYD = aPos.y + aHeight;
-
-	bPosXL = bPos.x;
-	bPosXR = bPos.x + bWidth;
-	bPosYU = bPos.y;
-	bPosYD = bPos.y + bHeight;
-
-	if (aPosXR < bPosXL) {
-		return false;
-	}
-	else if (aPosXL > bPosXR) {
-		return false;
-	}
-	else if (aPosYD < bPosYU) {
-		return false;
-	}
-	else if (aPosYU > bPosYD) {
-		return false;
-	}
-	else {
-		return true;
-	}
-}
-
-void colBox(ball& thing, float left, float right, float top, float bottom) {
+bool colBox(ball& thing, float left, float right, float top, float bottom) {
 	if (thing.position.y<top || thing.position.y>(bottom - thing.radius * 2))
 	{
 		thing.velocity.y *= -1;
@@ -234,6 +244,7 @@ void colBox(ball& thing, float left, float right, float top, float bottom) {
 		if (thing.position.y > bottom - thing.radius * 2) {
 			thing.position.y = bottom - thing.radius * 2;
 		}
+		return true;
 	}
 
 	if (thing.position.x < left || thing.position.x >(right - thing.radius * 2))
@@ -246,10 +257,12 @@ void colBox(ball& thing, float left, float right, float top, float bottom) {
 		if (thing.position.x > right - thing.radius * 2) {
 			thing.position.x = right - thing.radius * 2;
 		}
+		return true;
 	}
+	return false;
 }
 
-void colCircle(ball& thing, ball& thingHit) {
+bool colCircle(ball& thing, ball& thingHit) {
 	D3DXVECTOR2 distance = thing.position - thingHit.position;
 	D3DXVECTOR2 surfaceNormal;
 	D3DXVECTOR2 reflectionVector;
@@ -261,14 +274,18 @@ void colCircle(ball& thing, ball& thingHit) {
 		if ((thing.radius + thingHit.radius) > D3DXVec2Length(&distance)) {
 			D3DXVECTOR2 overlapVector;
 			overlapVector = surfaceNormal * overlap;
-			thing.position += overlapVector;
+			thing.position += 1.5 * overlapVector;
 		}
 
 		reflectionVector = thing.velocity - 2 * (D3DXVec2Dot(&thing.velocity, &surfaceNormal) * surfaceNormal);
 
 		thingHit.velocity = thing.velocity / ((thing.mass + thingHit.mass) / thing.mass);
 		thing.velocity = reflectionVector / ((thing.mass + thingHit.mass) / thingHit.mass);
+
+		return true;
 	}
+
+	return false;
 }
 
 void cycleSpriteFrame(ball& thing, int col, int row, int maxFrames) {
@@ -289,6 +306,7 @@ void cycleSpriteFrame(ball& thing, int col, int row, int maxFrames) {
 }
 
 int countdown = 0;
+int timer = 0;
 
 void gameS::update(game* games, int framesToUpdate, int& scoreOne, int& scoreTwo)
 {
@@ -345,15 +363,6 @@ void gameS::update(game* games, int framesToUpdate, int& scoreOne, int& scoreTwo
 	}
 
 	if (downKey) {
-		//if (player2.position.y <= (WINDOWHEIGHT - player2.height * player2.scaling.x)) {
-		//	/*	player2.moveY += player2.speed;*/
-		//}
-		//else {
-		//	if (player2.position.y <= (WINDOWHEIGHT - player2.height * player2.scaling.x)) {
-		//		player2.position.y = (WINDOWHEIGHT - player2.height * player2.scaling.x);
-		//	}
-		//}
-
 		player2.velocity -= player2.acceleration;
 
 		downKey = false;
@@ -372,28 +381,11 @@ void gameS::update(game* games, int framesToUpdate, int& scoreOne, int& scoreTwo
 	}
 
 	if (wKey) {
-		//if (player1.position.y >= 0) {
-		//	/*player1.moveY -= player1.speed;*/
-		//}
-		//else {
-		//	if (player1.position.y <= 0) {
-		//		player1.position.y = 0;
-		//	}
-		//}
 		player1.velocity += player1.acceleration;
 
 		wKey = false;
 	}
 	if (sKey) {
-		//if (player1.position.y <= (WINDOWHEIGHT - player1.height * player1.scaling.x)) {
-		//	/*player1.moveY += player1.speed;*/
-		//}
-		//else {
-		//	if (player1.position.y <= (WINDOWHEIGHT - player1.height * player1.scaling.x)) {
-		//		player1.position.y = (WINDOWHEIGHT - player1.height * player1.scaling.x);
-		//	}
-		//}
-
 		player1.velocity -= player1.acceleration;
 
 		sKey = false;
@@ -409,11 +401,21 @@ void gameS::update(game* games, int framesToUpdate, int& scoreOne, int& scoreTwo
 		dKey = false;
 	}
 
-	colBox(player2, WINDOWWIDTH / 2, WINDOWWIDTH, 0, WINDOWHEIGHT);
-	colBox(player1, 0, WINDOWWIDTH / 2, 0, WINDOWHEIGHT);
+	if (colBox(player2, WINDOWWIDTH / 2, WINDOWWIDTH, 0, WINDOWHEIGHT)) {
+		hitSound = true;
+	}
 
-	colCircle(player1, ball1);
-	colCircle(player2, ball1);
+	if (colBox(player1, 0, WINDOWWIDTH / 2, 0, WINDOWHEIGHT)) {
+		hitSound = true;
+	}
+
+	if (colCircle(player1, ball1)) {
+		hitSound = true;
+	}
+
+	if (colCircle(player2, ball1)) {
+		hitSound = true;
+	}
 
 	if (ball1.position.x < 0 || ball1.position.x > WINDOWWIDTH - ball1.width * ball1.scaling.x) {
 		if (ball1.position.x < 0) {
@@ -446,8 +448,6 @@ void gameS::update(game* games, int framesToUpdate, int& scoreOne, int& scoreTwo
 
 	if (ball1.position.y < 0 || ball1.position.y > WINDOWHEIGHT - ball1.height * ball1.scaling.y) {
 		ball1.velocity.y *= -1;
-		/*	ball1.velocity *= 1.05;
-			ball1.velocity.x *= 1.07;*/
 
 		if (ball1.position.y < 0) {
 			ball1.position.y = 0;
@@ -455,68 +455,17 @@ void gameS::update(game* games, int framesToUpdate, int& scoreOne, int& scoreTwo
 		if (ball1.position.y > WINDOWHEIGHT - ball1.height * ball1.scaling.y) {
 			ball1.position.y = WINDOWHEIGHT - ball1.height * ball1.scaling.y;
 		}
+
+		hitSound = true;
 	}
 
-	//if (checkCol(player1.position, 128, 32, ball1.position, 32, 32)) {
-	//	ball1.position.x = player1.position.x + 33;
-	//	ball1.velocity.x *= -1;
-	//	ball1.velocity *= 1.05;
-	//	ball1.velocity.y *= 1.07;
-
-	//	red = 255;
-	//	green = 0;
-	//	blue = 0;
-
-	//	if (pow(ball1.velocity.x, 2) > 1) {
-	//		ball1.velocity *= 1.05;
-	//	}
-	//	else {
-	//		ball1.velocity.x += 1;
-	//	}
-	//}
-
-	//if (checkCol(player2.position, 128, 32, ball1.position, 32, 32)) {
-	//	ball1.position.x = player2.position.x - 33;
-	//	ball1.velocity.x *= -1;
-	//	ball1.velocity *= 1.05;
-	//	ball1.velocity.x *= 1.02;
-
-	//	red = 0;
-	//	green = 0;
-	//	blue = 255;
-
-	//	if (pow(ball1.velocity.x, 2) > 1) {
-	//		ball1.velocity *= 1.05;
-	//	}
-	//	else {
-	//		ball1.velocity.y += 1;
-	//	}
-	//}
-
-	//if (pow(ball1.velocity.x * 10, 2) < 100) {
-	//	if (ball1.velocity >= 0) {
-	//		ball1.velocity.x += 10;
-	//	}
-	//	else {
-	//		ball1.velocity.x -= 10;
-	//	}
-	//}
-
-	//}
-
 	for (int frame = 0; frame < framesToUpdate; frame++) {
-		//if (gameStart == true) {
-		/*player1.position.y += player1.moveY;
-		player1.moveY = 0;
-		player2.position.y += player2.moveY;
-		player2.moveY = 0;*/
+		timer++;
 
-		//ball1.velocity += ball1.acceleration;
-		/*ball1.position += ball1.velocity;*/
-		//}
-
-		cycleSpriteFrame(player2, 2, 2, 2);
-		cycleSpriteFrame(player1, 2, 2, 2);
+		if (timer % 12 == 0) {
+			cycleSpriteFrame(player2, 2, 2, 2);
+			cycleSpriteFrame(player1, 2, 2, 2);
+		}
 
 		player2.rotation += player2.rotationAdd;
 		player2.rotationAdd = 0;
@@ -533,10 +482,6 @@ void gameS::update(game* games, int framesToUpdate, int& scoreOne, int& scoreTwo
 		ball1.velocity *= (1 - ball1.friction);
 		ball1.position += ball1.velocity;
 	}
-
-	/*cout << "ball1x: " << ball1.velocity.x << " ball1y: " << ball1.velocity.y << endl;*/
-
-	/*return 2;*/
 }
 
 void gameS::render(game* games, IDirect3DDevice9* d3dDevice)
@@ -592,4 +537,10 @@ void gameS::render(game* games, IDirect3DDevice9* d3dDevice)
 
 void gameS::playSound(game* games)
 {
+	if (hitSound) {
+		sounds->playSound1();
+		hitSound = false;
+	}
+
+	sounds->updateSounds();
 }
