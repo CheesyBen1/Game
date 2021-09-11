@@ -5,7 +5,6 @@
 
 class player
 {
-
 public:
 	player();
 	D3DXVECTOR2 position;
@@ -15,15 +14,11 @@ public:
 	int width;
 	float rotation = 0.0f;
 	D3DXVECTOR2 scaling = D3DXVECTOR2(1.0f, 1.0f);
-	D3DXVECTOR2 spriteCenter = D3DXVECTOR2(width / 2, height / 2);
+	D3DXVECTOR2 spriteCenter = D3DXVECTOR2(width * 0.5, height * 0.5);
 
 	int speed;
 
-	int moveX = 0;
-	int moveY = 0;
+	int spriteFrame = 0;
 
-	
-
-	
+	D3DXVECTOR2 move = D3DXVECTOR2(0.0f, 0.0f);
 };
-

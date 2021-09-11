@@ -1,9 +1,9 @@
-#ifndef MENUSTATE_H
-#define MENUSTATE_H
+#ifndef GAMEOVER_H
+#define GAMEOVER_H
 
 #include "states.h"
 
-class menu :
+class gameO :
 	public states
 {
 public:
@@ -18,15 +18,15 @@ public:
 	void render(game* games, IDirect3DDevice9* d3dDevice);
 	void playSound(game* games);
 
-	static menu* instance() {
-		return &menuState;
+	static gameO* instance() {
+		return &gameOverState;
 	}
 
 protected:
-	menu() { }
+	gameO() { }
 
 private:
-	static menu menuState;
+	static gameO gameOverState;
 
 	LPD3DXSPRITE sprite = NULL;
 	LPD3DXLINE line = NULL;
