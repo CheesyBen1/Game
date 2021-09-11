@@ -77,13 +77,13 @@
     <ClInclude Include="game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="states.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="gameW.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="audio.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="states.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
