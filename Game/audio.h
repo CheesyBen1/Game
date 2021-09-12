@@ -12,8 +12,8 @@ public:
 	void* extradriverdata = 0;
 
 	void initializeAudio();
-	void playSound1();
-	void playSoundtrack();
+	void playSound1(bool pause, float pan, float pitch, float vol, FMOD_MODE loop);
+	void playSoundtrack(bool pause, float pan, float pitch, float vol, FMOD_MODE loop);
 	void loadSounds(std::string soundeffect, std::string soundtrack);
 	void updateSounds();
 

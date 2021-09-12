@@ -6,14 +6,22 @@ void Audio::initializeAudio()
 	result = system->init(32, FMOD_INIT_NORMAL, extradriverdata);
 }
 
-void Audio::playSound1()
+void Audio::playSound1(bool pause, float pan, float pitch, float vol, FMOD_MODE loop)
 {
-	result = system->playSound(sound1, 0, false, &channel);
+	result = system->playSound(sound1, 0, pause, &channel);
+	channel->setPan(pan);
+	channel->setPitch(pitch);
+	channel->setVolume(vol);
+	sound1->setMode(loop);
 }
 
-void Audio::playSoundtrack()
+void Audio::playSoundtrack(bool pause, float pan, float pitch, float vol, FMOD_MODE loop)
 {
-	result = system->playSound(sound2, 0, false, &channel);
+	result = system->playSound(sound2, 0, pause, &channel);
+	channel->setPan(pan);
+	channel->setPitch(pitch);
+	channel->setVolume(vol);
+	sound2->setMode(loop);
 }
 
 void Audio::loadSounds(std::string soundeffect, std::string soundtrack)
