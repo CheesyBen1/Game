@@ -23,7 +23,9 @@ int blue = 255;
 
 int reset = 0;
 
-bool hitSound = false;
+bool hit1Sound = false;
+bool hit2Sound = false;
+bool hitGeneric = false;
 
 D3DXVECTOR2 lineVertices[] = { D3DXVECTOR2((WINDOWWIDTH / 2) - 1,0), D3DXVECTOR2(WINDOWWIDTH / 2 - 1, WINDOWHEIGHT) };
 D3DXVECTOR2 lineVertices2[] = { D3DXVECTOR2((WINDOWWIDTH / 2) + 1,0), D3DXVECTOR2(WINDOWWIDTH / 2 + 1, WINDOWHEIGHT) };
@@ -131,10 +133,13 @@ void gameS::init(IDirect3DDevice9* d3dDevice)
 	sounds->loadSounds("bounce.mp3", "bensound-happyrock.mp3");
 
 	//sounds->playSoundtrack();
+
+	sounds->playSoundtrack(false, 0, 1, 0.1, FMOD_LOOP_NORMAL);
 }
 
 void gameS::cleanup()
 {
+	sounds->playSoundtrack(true, 0, 1, 0.1, FMOD_LOOP_NORMAL);
 	sprite->Release();
 	sprite = NULL;
 
@@ -372,19 +377,19 @@ void gameS::update(game* games, int framesToUpdate, int& scoreOne, int& scoreTwo
 	}
 
 	if (colBox(player2, WINDOWWIDTH / 2, WINDOWWIDTH, 0, WINDOWHEIGHT)) {
-		hitSound = true;
+		hit2Sound = true;
 	}
 
 	if (colBox(player1, 0, WINDOWWIDTH / 2, 0, WINDOWHEIGHT)) {
-		hitSound = true;
+		hit1Sound = true;
 	}
 
 	if (colCircle(player1, ball1)) {
-		hitSound = true;
+		hit1Sound = true;
 	}
 
 	if (colCircle(player2, ball1)) {
-		hitSound = true;
+		hit2Sound = true;
 	}
 
 	if (ball1.position.x < 0 || ball1.position.x > WINDOWWIDTH - ball1.width * ball1.scaling.x) {
@@ -426,7 +431,7 @@ void gameS::update(game* games, int framesToUpdate, int& scoreOne, int& scoreTwo
 			ball1.position.y = WINDOWHEIGHT - ball1.height * ball1.scaling.y;
 		}
 
-		hitSound = true;
+		hitGeneric = true;
 	}
 
 	for (int frame = 0; frame < framesToUpdate; frame++) {
@@ -507,9 +512,19 @@ void gameS::render(game* games, IDirect3DDevice9* d3dDevice)
 
 void gameS::playSound(game* games)
 {
-	if (hitSound) {
-		sounds->playSound1();
-		hitSound = false;
+	if (hit1Sound) {
+		sounds->playSound1(false, -1, 1, 1, FMOD_LOOP_OFF);
+		hit1Sound = false;
+	}
+
+	if (hit2Sound) {
+		sounds->playSound1(false, 1, 1, 1, FMOD_LOOP_OFF);
+		hit2Sound = false;
+	}
+
+	if (hitGeneric) {
+		sounds->playSound1(false, 0, 1, 1, FMOD_LOOP_OFF);
+		hitGeneric = false;
 	}
 
 	sounds->updateSounds();
