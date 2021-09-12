@@ -14,6 +14,20 @@ void menu::init(IDirect3DDevice9* d3dDevice)
 
 void menu::cleanup()
 {
+	mouseCursorTexture->Release();
+	mouseCursorTexture = NULL;
+
+	font->Release();
+	font = NULL;
+
+	startFont->Release();
+	startFont = NULL;
+
+	endFont->Release();
+	endFont = NULL;
+
+	line->Release();
+	line = NULL;
 }
 
 void menu::pause()
@@ -49,6 +63,7 @@ void menu::update(game* games, int framesToUpdate, int& scoreOne, int& scoreTwo)
 	std::cout << "Menu (add UI, start exit buttons), Press Enter to start" << std::endl;
 }
 void menu::render(game* games, IDirect3DDevice9* d3dDevice) {
+	
 	d3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
 
 	d3dDevice->BeginScene();

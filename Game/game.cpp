@@ -134,6 +134,8 @@ void game::init(LPCSTR Title, int WINDOWWIDTH, int WINDOWHEIGHT)
 	dInputMouseDevice->Acquire();
 
 	myTimer.init(60);
+
+	ShowCursor(false);
 }
 
 void cleanupWindow() {
@@ -208,6 +210,7 @@ void game::getInput()
 
 void game::update()
 {
+	SetCursorPos(450,350);	
 	stateStack.back()->update(this, myTimer.framesToUpdate(), scoreOne, scoreTwo);
 }
 
