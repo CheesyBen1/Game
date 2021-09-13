@@ -8,6 +8,7 @@ class player
 public:
 	player();
 	D3DXVECTOR2 position;
+	D3DXVECTOR3 position3;
 	RECT rect;
 	LPDIRECT3DTEXTURE9 texture = NULL;
 	int height;

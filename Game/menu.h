@@ -3,6 +3,8 @@
 
 #include "states.h"
 
+
+
 class menu :public states
 {
 public:
@@ -29,18 +31,19 @@ private:
 	LPD3DXSPRITE sprite = NULL;
 	LPD3DXLINE line = NULL;
 	BYTE diKeys[256];
-	BYTE mouseClick[2];
-	LPARAM lParam;
+	
 	D3DXVECTOR3 mousePos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	LPDIRECT3DTEXTURE9 mouseCursorTexture = NULL;
+
 	DIMOUSESTATE mouseState;
-	LPD3DXSPRITE textSprite = NULL;
-	LPD3DXFONT font = NULL;
-	LPD3DXFONT startFont = NULL;
-	LPD3DXFONT endFont = NULL;
-	RECT textRect;
-	RECT startTextRect;
-	RECT endTextRect;
+	RECT rect;
 	Audio* sounds;
+
+	player cursor;
+
+	text titleText;
+	text startText;
+	text endText;
+
 };
 #endif

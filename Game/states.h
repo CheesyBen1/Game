@@ -3,6 +3,7 @@
 
 #define WIN32_LEAN_AND_MEAN
 #define _USE_MATH_DEFINES
+#define BUTTONDOWN(name, key) (name.rgbButtons[key] & 0x80)
 
 #include "game.h"
 #include "ball.h"
@@ -14,9 +15,10 @@
 #include <d3dx9.h>
 #include <dinput.h>
 #include "audio.h"
-
+#include "text.h"
 #include <vector>
 #include "FrameTimer.h"
+
 class states
 {
 public:
@@ -57,6 +59,20 @@ public:
 
 		return setRect;
 	}
+
+	bool cursorCol(player& cursor,text& hover) {
+		if(cursor.position3.x < hover.rect.left){
+			return false;
+		}else if(cursor.position3.x > hover.rect.right){
+			return false;
+		}else if(cursor.position3.y < hover.rect.top){
+			return false;
+		}else if(cursor.position3.y > hover.rect.bottom){
+			return false;
+		}else{
+			return true;
+	}
+}
 
 protected:
 	states() { }

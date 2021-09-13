@@ -203,6 +203,7 @@ void game::popState()
 
 void game::getInput()
 {
+	ShowCursor(false);
 	stateStack.back()->getInput(this, dInputKeyboardDevice, dInputMouseDevice);
 }
 

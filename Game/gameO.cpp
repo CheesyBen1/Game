@@ -10,6 +10,8 @@ bool spaceOverKey = false;
 
 void gameO::init(IDirect3DDevice9* d3dDevice)
 {
+	HRESULT hr;
+
 }
 
 void gameO::cleanup()
