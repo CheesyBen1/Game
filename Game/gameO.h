@@ -31,7 +31,12 @@ private:
 	LPD3DXSPRITE sprite = NULL;
 	LPD3DXLINE line = NULL;
 	BYTE diKeys[256];
-
+	RECT rect;
+	text gameO1Text;
+	text gameO2Text;
+	text player1TemScore;
+	text player2TemScore;
+	text conText;
 	Audio* sounds;
 };
 #endif

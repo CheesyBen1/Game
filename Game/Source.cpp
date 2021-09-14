@@ -21,7 +21,7 @@ using namespace std;
 //lp CmdLine = POINTER to a command line string
 //nShowCmd = style
 
-int main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
+int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
 	game pang;
 

@@ -115,8 +115,8 @@ void createInput() {
 	dInputMouseDevice->SetDataFormat(&c_dfDIMouse);
 
 	//	Set the cooperative level.
-	dInputKeyboardDevice->SetCooperativeLevel(g_hWnd, DISCL_BACKGROUND | DISCL_NONEXCLUSIVE);
-	dInputMouseDevice->SetCooperativeLevel(g_hWnd, DISCL_BACKGROUND | DISCL_NONEXCLUSIVE);
+	dInputKeyboardDevice->SetCooperativeLevel(g_hWnd, DISCL_FOREGROUND | DISCL_EXCLUSIVE);
+	dInputMouseDevice->SetCooperativeLevel(g_hWnd, DISCL_FOREGROUND | DISCL_EXCLUSIVE);
 }
 
 void game::init(LPCSTR Title, int WINDOWWIDTH, int WINDOWHEIGHT)
@@ -134,6 +134,8 @@ void game::init(LPCSTR Title, int WINDOWWIDTH, int WINDOWHEIGHT)
 	dInputMouseDevice->Acquire();
 
 	myTimer.init(60);
+
+	ShowCursor(false);
 }
 
 void cleanupWindow() {
@@ -150,6 +152,10 @@ void cleanupDirectX() {
 	dInputKeyboardDevice->Unacquire();
 	dInputKeyboardDevice->Release();
 	dInputKeyboardDevice = NULL;
+
+	dInputMouseDevice->Unacquire();
+	dInputMouseDevice->Release();
+	dInputMouseDevice = NULL;
 
 	//	Release DirectInput.
 	dInput->Release();
