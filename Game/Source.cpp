@@ -32,7 +32,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 	while (pang.running()) {
 		pang.getInput();
 		pang.update();
-		pang.render()
-			pang.playSound();
+		pang.render();
+		pang.playSound();
 	}
 }
