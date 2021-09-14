@@ -214,6 +214,7 @@ void game::getInput()
 
 void game::update()
 {
+	SetCursorPos(450,350);	
 	stateStack.back()->update(this, myTimer.framesToUpdate(), scoreOne, scoreTwo);
 }
 
