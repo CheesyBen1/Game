@@ -103,7 +103,7 @@ void menu::cleanup()
 	endText.d3dFont = NULL;
 
 	line->Release();
-	line = NULL;
+	line = NULL;*/
 }
 
 void menu::pause()
