@@ -12,8 +12,6 @@ public:
 
 	LPCSTR fontStyle;
 	LPCSTR content;
-	int scoreOne;
-	int scoreTwo;
 
 	int red = 255;
 	int green = 255;
