@@ -35,4 +35,6 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 		pang.render();
 		pang.playSound();
 	}
+
+	pang.cleanup();
 }
